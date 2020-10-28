@@ -7,5 +7,6 @@ target 'PalmCat' do
 
   # Pods for PalmCat
   pod 'RxBluetoothKit'
+  pod 'BluetoothKit'
 
 end
