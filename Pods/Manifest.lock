@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (5.2.2)
+  - JSNavigationController (0.1.5)
+  - MBPopup (5.0.3)
+  - RxBluetoothKit (6.0.0):
+    - RxSwift (~> 5.1)
+  - RxSwift (5.1.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - JSNavigationController (from `https://github.com/juliensagot/JSNavigationController.git`)
+  - MBPopup
+  - RxBluetoothKit
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - MBPopup
+    - RxBluetoothKit
+    - RxSwift
+
+EXTERNAL SOURCES:
+  JSNavigationController:
+    :git: https://github.com/juliensagot/JSNavigationController.git
+
+CHECKOUT OPTIONS:
+  JSNavigationController:
+    :commit: 160759bc6b0d0c3495f0f5ca8f424a5297c40939
+    :git: https://github.com/juliensagot/JSNavigationController.git
+
+SPEC CHECKSUMS:
+  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
+  JSNavigationController: dbc9675bd788adb3f05b9b767aad1810c290e0be
+  MBPopup: 14fe34c2f7c5d771ade596d0057f1f04c2cea0f8
+  RxBluetoothKit: dad22912b15b74a40df8f60057f218d4e851746d
+  RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+
+PODFILE CHECKSUM: 578bd649261a6fb9e12408d95b72745307a440a6
+
+COCOAPODS: 1.9.1

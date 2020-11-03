@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E4020612550EB3C00BABC84 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 1E4020602550EB3C00BABC84 /* www */; };
+		1E4020632550F10A00BABC84 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 1E4020622550F10A00BABC84 /* www */; };
 		1E57A0D3254949EB0036BB95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A0D2254949EB0036BB95 /* AppDelegate.swift */; };
 		1E57A0D5254949EB0036BB95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A0D4254949EB0036BB95 /* ViewController.swift */; };
 		1E57A0D7254949EC0036BB95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E57A0D6254949EC0036BB95 /* Assets.xcassets */; };
@@ -24,7 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E4020602550EB3C00BABC84 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		1E4020622550F10A00BABC84 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		1E57A0CF254949EB0036BB95 /* PalmCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PalmCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E57A0D2254949EB0036BB95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E57A0D4254949EB0036BB95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 		1E57A0D1254949EB0036BB95 /* PalmCat */ = {
 			isa = PBXGroup;
 			children = (
-				1E4020602550EB3C00BABC84 /* www */,
+				1E4020622550F10A00BABC84 /* www */,
 				1E57A112254A5D9C0036BB95 /* Custom */,
 				1E57A10F254A58500036BB95 /* View */,
 				1E57A0E62549764A0036BB95 /* BLE */,
@@ -206,7 +206,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E4020612550EB3C00BABC84 /* www in Resources */,
+				1E4020632550F10A00BABC84 /* www in Resources */,
 				1E57A0D7254949EC0036BB95 /* Assets.xcassets in Resources */,
 				1E57A0DA254949EC0036BB95 /* Main.storyboard in Resources */,
 			);

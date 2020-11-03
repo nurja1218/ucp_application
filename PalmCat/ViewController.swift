@@ -74,6 +74,7 @@ class ViewController: NSViewController , WKUIDelegate{
     }
     func loadIndex()
     {
+        
      //   Bundle.main.path.path(forResource, "index", ofType:"ext", inDirectory: "www")
         var fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory:"www")!)
         /*
