@@ -7,6 +7,9 @@ target 'PalmCat' do
 
   # Pods for PalmCat
   pod 'RxBluetoothKit'
-  pod 'BluetoothKit'
+  pod 'Alamofire'
+  pod 'JSNavigationController', :git => 'https://github.com/juliensagot/JSNavigationController.git'
+  pod "MBPopup"
 
+  
 end
