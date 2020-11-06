@@ -83,6 +83,8 @@ class ViewController: NSViewController , WKUIDelegate{
         
         //keyboardKeyDown(key: 0x7A)
         //keyboardKeyUp(key: 0x7A)
+        
+        NSWorkspace.shared.launchApplication("Pero")
     }
     override func touchesBegan(with event: NSEvent) {
         
