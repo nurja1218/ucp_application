@@ -10,6 +10,6 @@ target 'PalmCat' do
   pod 'Alamofire'
   pod 'JSNavigationController', :git => 'https://github.com/juliensagot/JSNavigationController.git'
   pod "MBPopup"
-
-  
+  pod 'OHMySQL'
+ 
 end

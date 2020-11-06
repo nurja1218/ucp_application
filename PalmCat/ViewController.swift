@@ -9,6 +9,7 @@
 import Cocoa
 import JSNavigationController
 import WebKit
+import OHMySQL
 /*
 private extension Selector {
     static let pushToNextViewController = #selector(ViewController.pushToNextViewController)
@@ -37,6 +38,7 @@ class ViewController: NSViewController , WKUIDelegate{
         self.view.layer?.backgroundColor = NSColor(red: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, green: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, blue: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, alpha: 1).cgColor
         
       
+        testMySQL()
 
           
     }
@@ -63,17 +65,38 @@ class ViewController: NSViewController , WKUIDelegate{
        // newDoc()
           */
        // testKey()
+    
         loadIndex()
         timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
-
+        
         //keyboardKeyDown(key: 0x7A)
         //keyboardKeyUp(key: 0x7A)
     }
     override func touchesBegan(with event: NSEvent) {
         
     }
+    func testMySQL()
+    {
+        /*
+         host: palmcat.co.kr
+         port: 3306
+         url: palmcat.co.kr:3306
+         id: dev01
+         passward: palmcatDEV0!`
+         */
+        let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "palmcat.co.kr", dbName: "jcp_db", port: 3306, socket: "")
+        let coordinator = OHMySQLStoreCoordinator(user: user!)
+        coordinator.encoding = .UTF8MB4
+        coordinator.connect()
+        
+        
+        let context = OHMySQLQueryContext()
+        context.storeCoordinator = coordinator
+        OHMySQLContainer.shared.mainQueryContext = context
+    }
     func loadIndex()
     {
+        
         
      //   Bundle.main.path.path(forResource, "index", ofType:"ext", inDirectory: "www")
         var fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory:"www")!)

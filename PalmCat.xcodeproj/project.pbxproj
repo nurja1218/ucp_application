@@ -20,6 +20,7 @@
 		1E57A10E254A4FC10036BB95 /* BasicNavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A10D254A4FC10036BB95 /* BasicNavigationBarViewController.swift */; };
 		1E57A111254A58680036BB95 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A110254A58680036BB95 /* NavigationBarView.swift */; };
 		1E57A114254A5DC00036BB95 /* PeroButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A113254A5DC00036BB95 /* PeroButton.swift */; };
+		1E880EEF25524F2D000CB584 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E880EEE25524F2D000CB584 /* WebKit.framework */; };
 		8A885BAC0A68464BB7FD1200 /* Pods_PalmCat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7749FD5FBEB39DAE089BD1AE /* Pods_PalmCat.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		1E57A10D254A4FC10036BB95 /* BasicNavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicNavigationBarViewController.swift; sourceTree = "<group>"; };
 		1E57A110254A58680036BB95 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		1E57A113254A5DC00036BB95 /* PeroButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeroButton.swift; sourceTree = "<group>"; };
+		1E880EEE25524F2D000CB584 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		4327ECEAAA90462B0C67F915 /* Pods-PalmCat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PalmCat.release.xcconfig"; path = "Target Support Files/Pods-PalmCat/Pods-PalmCat.release.xcconfig"; sourceTree = "<group>"; };
 		7749FD5FBEB39DAE089BD1AE /* Pods_PalmCat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PalmCat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		85456ED4C1BECBCB721267B7 /* Pods-PalmCat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PalmCat.debug.xcconfig"; path = "Target Support Files/Pods-PalmCat/Pods-PalmCat.debug.xcconfig"; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E880EEF25524F2D000CB584 /* WebKit.framework in Frameworks */,
 				8A885BAC0A68464BB7FD1200 /* Pods_PalmCat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,6 +144,7 @@
 		57BF1A083B492E0042FFEF1A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E880EEE25524F2D000CB584 /* WebKit.framework */,
 				7749FD5FBEB39DAE089BD1AE /* Pods_PalmCat.framework */,
 			);
 			name = Frameworks;
