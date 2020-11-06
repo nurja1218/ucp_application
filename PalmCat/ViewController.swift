@@ -29,6 +29,14 @@ class ViewController: NSViewController , WKUIDelegate{
         
       //  self.title = "PalmCat"
 
+     //   let ScreenStart = NSSize(width: (NSScreen.main?.frame.width)! / 1.5, height: (NSScreen.main?.frame.height)! / 1.5)
+
+        
+       // self.view.frame.size = ScreenStart
+    
+        
+       // self.view.frame.origin = NSPoint(x: ( width!  - 1280 )/2, y: (NSScreen.main?.frame.height)! / 2)
+        
         preferredContentSize = view.frame.size
         
         self.view.wantsLayer = true
@@ -38,9 +46,13 @@ class ViewController: NSViewController , WKUIDelegate{
         self.view.layer?.backgroundColor = NSColor(red: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, green: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, blue: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, alpha: 1).cgColor
         
       
-     //   testMySQL()
+    //   testMySQL()
 
           
+    }
+    override func viewWillAppear() {
+        self.view.window?.center()
+
     }
    @objc func timerAction(){
       
