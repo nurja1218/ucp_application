@@ -46,7 +46,7 @@ class ViewController: NSViewController , WKUIDelegate{
         self.view.layer?.backgroundColor = NSColor(red: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, green: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, blue: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, alpha: 1).cgColor
         
       
-    //   testMySQL()
+       testMySQL()
 
           
     }
