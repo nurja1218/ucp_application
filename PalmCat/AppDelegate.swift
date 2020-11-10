@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import CoreData
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -14,6 +15,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     
     var window: NSWindow!
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+         let container = NSPersistentContainer(name: "Users") // 여기는 파일명을 적어줘요.
+         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+             if let error = error {
+                 fatalError("Unresolved error, \((error as NSError).userInfo)")
+             }
+         })
+         return container
+     }()
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
        

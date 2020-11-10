@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Command" representedClassName="Command" syncable="YES" codeGenerationType="class">
+        <attribute name="gesture" optional="YES" attributeType="String"/>
+        <attribute name="group" optional="YES" attributeType="String"/>
+        <attribute name="userid" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="UserList" representedClassName="UserList" syncable="YES" codeGenerationType="class">
+        <attribute name="answer" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Users" representedClassName="Users" syncable="YES" codeGenerationType="class">
+        <attribute name="answer" optional="YES" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="password" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="userid" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="Users" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="Command" positionX="136.78125" positionY="116.56640625" width="128" height="88"/>
+        <element name="UserList" positionX="54" positionY="90" width="128" height="88"/>
+    </elements>
+</model>

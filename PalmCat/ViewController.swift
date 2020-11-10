@@ -23,6 +23,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
     @IBOutlet weak var button:NSButton!
     
     var timer = Timer()
+    
+    var handType:String = ""
+    var usageType2:String = ""
+    var usageType3:String = ""
+    var usageType4:String = ""
+    
+    var usageType:String = ""
+    
+    var user:Users!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,29 +63,14 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
       //   configuration.userContentController = userController
         
 
-        let uuid = UUID().uuidString
-        let userID = UserDefaults.standard.string(forKey: "USER_ID")
-        if(userID == nil || userID?.count == 0)
-        {
-            UserDefaults.standard.set("uuid", forKey: "USER_ID")
-            UserDefaults.standard.synchronize()
-
-        }
+    //    let uuid = UUID().uuidString
       
        
-        testMySQL()
+        getServerUserList()
         
+      /*
         
-        let query = OHMySQLQueryRequestFactory.select("userlist", condition: nil)
-        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
-        
-        for dict in ( response as! NSArray)
-       {
-      //     print(dict)
-       }
-      
-        
-        let query2 = OHMySQLQueryRequestFactory.select("applist", condition: nil)
+        let query2 = OHMySQLQueryRequestFactory.select("user_b", condition: nil)
         
         let response2 = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query2)
         
@@ -84,50 +78,288 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         {
             print(dict)
         }
-       
-      
-        
-
+ */
+ 
           
     }
+   
+    func getServerUserList()
+    {
+    
+        connectDB()
+        
+
+        let query = OHMySQLQueryRequestFactory.select("userlist", condition: nil)
+        
+        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        
+        for _dict in ( response! as! NSArray)
+        {
+            let dict:[String:Any] = _dict as! [String:Any]
+            let answer  = dict["answer"] as? String
+            
+            let id  = dict["id"] as? Int
+            
+            let type  = dict["user_TypeName"] as? String
+            
+            CoreDataManager.shared.saveUserList(type: type!, id: id!,  answer:answer!,  onSuccess: { (success) in
+                
+                print("success")
+            })
+            
+            
+        }
+              
+    }
+    
     override func viewWillAppear() {
         self.view.window?.center()
      
 
     }
-    
+    func Alert(question: String, text: String)  {
+        let alert = NSAlert()
+        alert.messageText = question
+        alert.informativeText = text
+        alert.alertStyle = NSAlert.Style.warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+      //  alert.addButton(withTitle: "Cancel")
+        //return alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn
+    }
+    func processSignUp()
+    {
+     
+        let countryS = "var index = document.getElementsByTagName('select')[0].selectedIndex; document.getElementsByTagName('option')[index].value"
+          
+        let nameS = "document.getElementsByTagName('input')[0].value"
+        
+        let idS = "document.getElementsByTagName('input')[1].value"
+     
+        let passS0 = "document.getElementsByTagName('input')[2].value"
+         
+        let passS1 = "document.getElementsByTagName('input')[3].value"
+              
+        let checkS1 = "document.getElementsByTagName('input')[4].value"
+              
+        webView.evaluateJavaScript(nameS) { (result, error) in
+        
+            if let name = result {
+            
+                self.webView.evaluateJavaScript(idS) { (result, error) in
+                
+                    if let email = result {
+                    
+                      self.webView.evaluateJavaScript(passS0) { (result, error) in
+                      
+                          if let pass0 = result {
+                          
+                            self.webView.evaluateJavaScript(passS1) { (result, error) in
+                                               
+                            
+                                if let pass1 = result {
+                                
+                                    self.webView.evaluateJavaScript(checkS1) { (result, error) in
+                                                                              
+                                                           
+                                                            
+                                        if let check = result {
+                                        
+                                      //      let checkPrivacy = check as! Bool
+                                            if((name as? String)!.count > 0 && (email as? String)!.count > 0 &&
+                                                (pass0 as? String)!.count > 0 && (pass1 as? String)!.count > 0 )
+                                            {
+                                                if( pass0 as? String == pass1 as? String)
+                                                {
+                                                    if((check as! String) == "on")
+                                                    {
+                                                        // Success
+                                                        /*
+                                                       
+                                                        */
+                                                         self.webView.evaluateJavaScript(countryS) { (result, error) in
+                                                                      
+                                                             if let country = result
+                                                            {
+                                                                if( (country as? String)!.count > 0)
+                                                                {
+                                                                    CoreDataManager.shared.saveUser(name: name as! String, id: email as! String, password: pass0 as! String, country: (country as? String)!,answer: "", type:"", onSuccess:{ (success) in
+                                                                             
+                                                                        
+                                                                        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+                                                                        
+                                                                        self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                                                                        
+                                                                                                                  
+                                                                    })
+                                                                }
+                                                                else
+                                                                {
+                                                                    // fail
+                                                                }
+                                                                
+                                                            }
+                                                                                                              
+                                                        }
+                                                        
+                                                                                                     
+                                                    }
+                                                    else
+                                                    {
+                                                        //fail
+                                                    }
+                                               
+                                                }
+                                                else
+                                                {
+                                                    // fail
+                                                }
+                                            }
+                                           
+                                            
+                                        }
+                                        
+                                    }
+                                
+                                }
+                                                   
+                                            
+                            }
+                              
+                          }
+                          
+                      }
+
+                        
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    func processLogin()
+    {
+       
+        let jsString0 = "document.getElementsByTagName('input')[0].value"
+        
+        let jsString1 = "document.getElementsByTagName('input')[1].value"
+      
+        
+        webView.evaluateJavaScript(jsString0) { (result, error) in
+        
+            if let id = result {
+            
+                
+                self.user = CoreDataManager.shared.getUser(query: id as! String)
+                let type = self.user.type
+                let answer = self.user.answer
+                
+                      
+                if((id as! String).count > 0  && self.user.userid!.count > 0 && self.user.userid == (id as! String))
+                {
+                    // userid 존재
+                    self.webView.evaluateJavaScript(jsString1) { (result, error) in
+                               
+                                
+                        if let pass = result {
+                                   
+                            if(self.user.password == pass as? String )
+                            {
+                                       
+                            
+                                
+                                let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+                                
+                                self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                                
+                            }
+                            
+                            else
+                            {
+                            
+                                self.Alert(question: "패스워드를 정확하게 입력하세요.", text: "")
+                                             
+
+                            }
+                            
+                        }
+                        else
+                        {
+                            self.Alert(question: "정보를 정확하게 입력하세요.", text: "")
+                                
+                        }
+                        
+                    
+                
+                    }
+                }
+                else{
+                    
+                                   
+                         
+                    self.Alert(question: "정보를 정확하게 입력하세요.", text: "")
+                    
+                    
+                }
+            
+        
+            }
+            else
+            {
+                       
+                self.Alert(question: "정보를 정확하게 입력하세요.", text: "")
+                
+            }
+        }
+                    
+    }
+    func goSignUp()
+    {
+        
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.2", ofType: "html", inDirectory:"www/ucp-v03-home")!)
+        
+        self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+        
+        
+    }
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
        
         if navigationAction.navigationType == WKNavigationType.linkActivated {
         
             if(navigationAction.request.url?.absoluteString.contains("login.html") == true)
             {
-                let jsString0 = "document.getElementsByTagName('input')[0].value"
-                let jsString1 = "document.getElementsByTagName('input')[1].value"
-
-                        
-                webView.evaluateJavaScript(jsString0) { (result, error) in
-                
-                    if let result = result {
+                let userID = UserDefaults.standard.string(forKey: "USER_ID")
+                if(userID == nil || userID!.count ==  0)
+                {
+                    // 회원 가입 프로 세스
                     
-                        UserDefaults.standard.set(result, forKey: "USER_ID")
-                       
-                        webView.evaluateJavaScript(jsString1) { (result, error) in
-                                      
-                        
-                            if let result = result {
-                            
-                                UserDefaults.standard.set(result, forKey: "USER_PASSWORD")
-                                UserDefaults.standard.synchronize()
-                                               
-                                print(result)
-                                
-                            }
-                                      
-                        }
-                    }
                 }
+                else
+                {
+                    // 로그인 과정
+                    processLogin()
+            
+                }
+                
+                
+ 
             }
+             
+            if(navigationAction.request.url?.absoluteString.contains("signup.html") == true)
+            {
+                 goSignUp()
+                
+            }
+            if(navigationAction.request.url?.absoluteString.contains("signup_submit.html") == true)
+            {
+                
+                
+                processSignUp()
+                
+            }
+            //signup_submit.html
             if(navigationAction.request.url?.absoluteString.contains("ustart.html") == true)
             {
                 
@@ -145,42 +377,101 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
             if(navigationAction.request.url?.absoluteString.contains("lefthand.html") == true)
             {
                
-                   decisionHandler(.allow)
-                   setHandTypeL()
+                
+                decisionHandler(.allow)
+                
+                setHandTypeL()
+                
+                handType = "1"
                
             }
             if(navigationAction.request.url?.absoluteString.contains("righthand.html") == true)
             {
                
-                   decisionHandler(.allow)
-                   setHandTypeR()
+                
+                decisionHandler(.allow)
+                
+                setHandTypeR()
+                
+                handType = "2"
+                
                
             }
             if(navigationAction.request.url?.absoluteString.contains("env.html") == true)
             {
              
-                 decisionHandler(.allow)
-                 setUserEnvironment()
+               
+                let list = navigationAction.request.url?.absoluteString.components(separatedBy:  "?")
+                
+                if(list!.count > 1)
+                {
+                
+                    var strWork  = list![1]
+                    
+                    usageType4 = strWork
+                    
+                    usageType = handType + usageType2 + usageType3 + usageType4
+                    
+                    let ret =  CoreDataManager.shared.getUserType(query: usageType)
+                    
+                    let id = user.userid
+                    let password = user.password
+                    let country = user.country
+                    let name = user.name
+                    
+                    CoreDataManager.shared.saveUser(name: name! , id: id!, password: password!, country: country!,answer: usageType, type:ret, onSuccess:{ (success) in
+                                                                                               
+                    
+                        print(success)
+                        
+                                                                                      
+                    })
+                    
+                    
+                    print(ret)
+                }
+                
+                decisionHandler(.allow)
+                
+                setUserEnvironment()
              
             }
-            //setUserEnvironment
-            //
-            //http://NO4.html
-            /*
-            let list = navigationAction.request.url?.absoluteString.components(separatedBy:  "?")
-                               
-            if(list!.count > 1)
+            if(navigationAction.request.url?.absoluteString.contains("NO.6.html") == true)
             {
-                var strWork  = list![1]
+                   
+                let list = navigationAction.request.url?.absoluteString.components(separatedBy:  "?")
+                      
+            
+                if(list!.count > 1)
+                {
                 
+                    var strWork  = list![1]
+                    usageType2 = strWork
+                    print(strWork)
+                
+                }
+                decisionHandler(.allow)
+                       
             }
 
-       
-            decisionHandler(.allow)
+            if(navigationAction.request.url?.absoluteString.contains("NO.7.html") == true)
+            {
+                   
+                let list = navigationAction.request.url?.absoluteString.components(separatedBy:  "?")
+                      
             
-            
-            return
- */
+                if(list!.count > 1)
+                {
+                
+                    var strWork  = list![1]
+                    usageType3 = strWork
+                    print(strWork)
+                
+                }
+                decisionHandler(.allow)
+                       
+            }
+
  
         }
         else if navigationAction.navigationType == WKNavigationType.formSubmitted
@@ -191,7 +482,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         {
             print(navigationAction.navigationType)
         }
-//if navigationAction.navigationType == WKNavigationType.linkActivated
 
           decisionHandler(.allow)
     }
@@ -231,7 +521,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         NSWorkspace.shared.launchApplication("Pero")
     }
    
-    func testMySQL()
+    func connectDB()
     {
         /*
          host: palmcat.co.kr
@@ -254,7 +544,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
     {
         
 
-        let userID = UserDefaults.standard.string(forKey: "USER_ID")
+        
+        
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
+          
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+        /*
         if(userID == nil || userID?.count == 0)
         {
             
@@ -270,6 +565,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
             webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
 
         }
+ */
           
 
     }

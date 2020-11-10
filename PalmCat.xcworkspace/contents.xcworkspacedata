@@ -2,6 +2,24 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:UserList+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:UserList+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Command+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Command+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Users+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Users+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:PalmCat.xcodeproj">
    </FileRef>
    <FileRef
