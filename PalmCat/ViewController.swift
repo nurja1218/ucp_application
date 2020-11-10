@@ -16,7 +16,7 @@ private extension Selector {
     static let popViewController = #selector(ViewController.popViewController)
 }
  */
-class ViewController: NSViewController , WKUIDelegate{
+class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
     
     @IBOutlet weak var webView:WKWebView!
 
@@ -27,68 +27,210 @@ class ViewController: NSViewController , WKUIDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      //  self.title = "PalmCat"
-
-     //   let ScreenStart = NSSize(width: (NSScreen.main?.frame.width)! / 1.5, height: (NSScreen.main?.frame.height)! / 1.5)
-
-        
-       // self.view.frame.size = ScreenStart
-    
-        
-       // self.view.frame.origin = NSPoint(x: ( width!  - 1280 )/2, y: (NSScreen.main?.frame.height)! / 2)
-        
+     
         preferredContentSize = view.frame.size
         
         self.view.wantsLayer = true
              
         view.translatesAutoresizingMaskIntoConstraints = false
-             
-        self.view.layer?.backgroundColor = NSColor(red: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, green: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, blue: CGFloat(arc4random_uniform(63)) / 63.0 + 0.5, alpha: 1).cgColor
         
+        let webConfiguration = WKWebViewConfiguration()
+        // Fix Fullscreen mode for video and autoplay
+        webConfiguration.preferences.javaScriptEnabled = true
+           
+        webConfiguration.allowsAirPlayForMediaPlayback = true
+
+        //webView.configuration = webConfiguration
+        webView.navigationDelegate = self
+        
+     //   let userController: WKUserContentController = WKUserContentController()
+          
+      //  let userScript: WKUserScript = WKUserScript(source: "test01()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+        
+      //  userController.addUserScript(userScript)
+          
+      //  userController.add(self, name: Constants.callBackHandlerKey)
+        // let configuration = WKWebViewConfiguration()
+      //   configuration.userContentController = userController
+        
+
+        let uuid = UUID().uuidString
+        let userID = UserDefaults.standard.string(forKey: "USER_ID")
+        if(userID == nil || userID?.count == 0)
+        {
+            UserDefaults.standard.set("uuid", forKey: "USER_ID")
+            UserDefaults.standard.synchronize()
+
+        }
       
-       testMySQL()
+       
+        testMySQL()
+        
+        
+        let query = OHMySQLQueryRequestFactory.select("userlist", condition: nil)
+        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        
+        for dict in ( response as! NSArray)
+       {
+      //     print(dict)
+       }
+      
+        
+        let query2 = OHMySQLQueryRequestFactory.select("applist", condition: nil)
+        
+        let response2 = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query2)
+        
+        for dict in ( response2 as! NSArray)
+        {
+            print(dict)
+        }
+       
+      
+        
 
           
     }
     override func viewWillAppear() {
         self.view.window?.center()
+     
 
     }
-   @objc func timerAction(){
-      
-      var fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "g1", ofType: "html", inDirectory:"www")!)
     
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+       
+        if navigationAction.navigationType == WKNavigationType.linkActivated {
+        
+            if(navigationAction.request.url?.absoluteString.contains("login.html") == true)
+            {
+                let jsString0 = "document.getElementsByTagName('input')[0].value"
+                let jsString1 = "document.getElementsByTagName('input')[1].value"
+
+                        
+                webView.evaluateJavaScript(jsString0) { (result, error) in
+                
+                    if let result = result {
+                    
+                        UserDefaults.standard.set(result, forKey: "USER_ID")
+                       
+                        webView.evaluateJavaScript(jsString1) { (result, error) in
+                                      
+                        
+                            if let result = result {
+                            
+                                UserDefaults.standard.set(result, forKey: "USER_PASSWORD")
+                                UserDefaults.standard.synchronize()
+                                               
+                                print(result)
+                                
+                            }
+                                      
+                        }
+                    }
+                }
+            }
+            if(navigationAction.request.url?.absoluteString.contains("ustart.html") == true)
+            {
+                
+                decisionHandler(.allow)
+                startUsageType()
+                
+            }
+            if(navigationAction.request.url?.absoluteString.contains("back.html") == true)
+            {
+               
+                   decisionHandler(.allow)
+                   backIntro()
+               
+            }
+            if(navigationAction.request.url?.absoluteString.contains("lefthand.html") == true)
+            {
+               
+                   decisionHandler(.allow)
+                   setHandTypeL()
+               
+            }
+            if(navigationAction.request.url?.absoluteString.contains("righthand.html") == true)
+            {
+               
+                   decisionHandler(.allow)
+                   setHandTypeR()
+               
+            }
+            if(navigationAction.request.url?.absoluteString.contains("env.html") == true)
+            {
+             
+                 decisionHandler(.allow)
+                 setUserEnvironment()
+             
+            }
+            //setUserEnvironment
+            //
+            //http://NO4.html
+            /*
+            let list = navigationAction.request.url?.absoluteString.components(separatedBy:  "?")
+                               
+            if(list!.count > 1)
+            {
+                var strWork  = list![1]
+                
+            }
+
+       
+            decisionHandler(.allow)
+            
+            
+            return
+ */
+ 
+        }
+        else if navigationAction.navigationType == WKNavigationType.formSubmitted
+        {
+            print("")
+        }
+        else
+        {
+            print(navigationAction.navigationType)
+        }
+//if navigationAction.navigationType == WKNavigationType.linkActivated
+
+          decisionHandler(.allow)
+    }
     
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        //ready to be processed
+        let title = webView.title
+        if( title == "c2")
+        {
+            print(title)
+         
+            timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+            
+        }
+        
+    }
+    @objc func timerAction(){
+             
+        
+        var fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16", ofType: "html", inDirectory:"www/cup-v03-m")!)
+        
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+        
+        
         timer.invalidate()
-    
-   }
+        
+    }
+ 
     override func viewDidAppear() {
         super.viewDidAppear()
         view.superview?.addConstraints(viewConstraints())
     
 
-        // NavigationBar
-        /*
-        (navigationBarVC as? BasicNavigationBarViewController)?.backButton?.target = self
-        (navigationBarVC as? BasicNavigationBarViewController)?.backButton?.action = .popViewController
-        (navigationBarVC as? BasicNavigationBarViewController)?.nextButton?.target = self
-        (navigationBarVC as? BasicNavigationBarViewController)?.nextButton?.action = .pushToNextViewController
-       // newDoc()
-          */
-       // testKey()
     
-        loadIndex()
-        timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
-        
-        //keyboardKeyDown(key: 0x7A)
-        //keyboardKeyUp(key: 0x7A)
-        
+        loadIntro()
+
         NSWorkspace.shared.launchApplication("Pero")
     }
-    override func touchesBegan(with event: NSEvent) {
-        
-    }
+   
     func testMySQL()
     {
         /*
@@ -98,7 +240,7 @@ class ViewController: NSViewController , WKUIDelegate{
          id: dev01
          passward: palmcatDEV0!`
          */
-        let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "palmcat.co.kr", dbName: "jcp_db", port: 3306, socket: "")
+        let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "106.10.42.103", dbName: "jcp_db", port: 3306, socket: nil)
         let coordinator = OHMySQLStoreCoordinator(user: user!)
         coordinator.encoding = .UTF8MB4
         coordinator.connect()
@@ -108,66 +250,60 @@ class ViewController: NSViewController , WKUIDelegate{
         context.storeCoordinator = coordinator
         OHMySQLContainer.shared.mainQueryContext = context
     }
-    func loadIndex()
+    func loadIntro()
     {
         
-        
-     //   Bundle.main.path.path(forResource, "index", ofType:"ext", inDirectory: "www")
-        var fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory:"www")!)
-        /*
-        
-          do {
-                        fileURL = try fileURLForBuggyWKWebView8(fileURL: fileURL)
-                        webView.load(URLRequest(url: fileURL))
-                    } catch let error as NSError {
-                        print("Error: " + error.debugDescription)
-                  
+
+        let userID = UserDefaults.standard.string(forKey: "USER_ID")
+        if(userID == nil || userID?.count == 0)
+        {
+            
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+            
         }
- */
-              webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
-        
-        
-/*
-          if #available(iOS 9.0, *) {
-              // iOS9 and above. One year later things are OK.
-              webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
-          } else {
-              // iOS8. Things can (sometimes) be workaround-ed
-              //   Brave people can do just this
-              //   fileURL = try! pathForBuggyWKWebView8(fileURL: fileURL)
-              //   webView.load(URLRequest(url: fileURL))
-              do {
-                  fileURL = try fileURLForBuggyWKWebView8(fileURL: fileURL)
-                  webView.load(URLRequest(url: fileURL))
-              } catch let error as NSError {
-                  print("Error: " + error.debugDescription)
-              }
-          }
- */
-    }
-    func fileURLForBuggyWKWebView8(fileURL: URL) throws -> URL {
-        // Some safety checks
-        if !fileURL.isFileURL {
-            throw NSError(
-                domain: "BuggyWKWebViewDomain",
-                code: 1001,
-                userInfo: [NSLocalizedDescriptionKey: NSLocalizedString("URL must be a file URL.", comment:"")])
+        else
+        {
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
         }
-        try! fileURL.checkResourceIsReachable()
+          
 
-        // Create "/temp/www" directory
-        let fm = FileManager.default
-        let tmpDirURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("www")
-        try! fm.createDirectory(at: tmpDirURL, withIntermediateDirectories: true, attributes: nil)
-
-        // Now copy given file to the temp directory
-        let dstURL = tmpDirURL.appendingPathComponent(fileURL.lastPathComponent)
-        let _ = try? fm.removeItem(at: dstURL)
-        try! fm.copyItem(at: fileURL, to: dstURL)
-
-        // Files in "/temp/www" load flawlesly :)
-        return dstURL
     }
+    func startUsageType()
+    {
+       
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.4", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+    }
+    func backIntro()
+    {
+       
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+    }
+    func setHandTypeL()
+    {
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.5", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+    }
+    func setHandTypeR()
+    {
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.5", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+    }
+    func setUserEnvironment()
+    {
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.8", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+    }
+
     func testKey()
        {
            let eventSource = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
@@ -270,5 +406,13 @@ class ViewController: NSViewController , WKUIDelegate{
         navigationController?.popViewController(animated: true)
     }
  */
+}
+
+
+
+extension URLRequest {
+    var isHttpLink: Bool {
+        return self.url?.scheme?.contains("#") ?? false
+    }
 }
 
