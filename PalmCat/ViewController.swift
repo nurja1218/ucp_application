@@ -113,6 +113,59 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         }
               
     }
+    func getUserType(condition:String)
+    {
+    
+        connectDB()
+        
+        let c = "app_Name =" + "'" + condition + "'"
+        
+        let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
+        
+        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        
+        if ( response == nil || (response! as! NSArray).count == 0)
+        {
+            return
+        }
+        var option = String()
+        option.append("<option>")
+        option.append("Select one...")
+        option.append("</option>")
+            
+        for _dict in ( response! as! NSArray)
+        {
+            
+            let dict:[String:Any] = _dict as! [String:Any]
+            
+            let app_Name  = dict["app_Name"] as? String
+            let command  = dict["command"] as? String
+            let gesture  = dict["gesture"] as? String
+            
+               
+            let shortcut  = dict["shortcut"] as? String
+              
+            let touch  = dict["touch"] as? String
+
+               
+            option.append("<option>")
+            option.append(command!)
+            option.append("</option>")
+                                           
+                              
+              
+        
+        }
+        
+        let script = "document.getElementsByTagName('select')[1].innerHTML = " + "'" + option + "'"
+        
+         
+        webView.evaluateJavaScript(script) { (result, error) in
+                      
+                          
+                      
+        }
+    }
     func getServerAppList()
     {
     
@@ -324,8 +377,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
             
                 
                 self.user = CoreDataManager.shared.getUser(query: id as! String)
-                let type = self.user.type
-                let answer = self.user.answer
                 
                       
                 if((id as! String).count > 0  && self.user.userid!.count > 0 && self.user.userid == (id as! String))
@@ -402,21 +453,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         
             if(navigationAction.request.url?.absoluteString.contains("login.html") == true)
             {
-                let userID = UserDefaults.standard.string(forKey: "USER_ID")
-                if(userID == nil || userID!.count ==  0)
-                {
-                    // 회원 가입 프로 세스
-                    
-                }
-                else
-                {
-                    // 로그인 과정
-                    processLogin()
-            
-                }
-                
-                
- 
+                  
+                processLogin()
+    
             }
              
             if(navigationAction.request.url?.absoluteString.contains("signup.html") == true)
@@ -478,7 +517,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
                 if(list!.count > 1)
                 {
                 
-                    var strWork  = list![1]
+                    let strWork  = list![1]
                     
                     usageType4 = strWork
                     
@@ -517,7 +556,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
                 if(list!.count > 1)
                 {
                 
-                    var strWork  = list![1]
+                    let strWork  = list![1]
                     usageType2 = strWork
                     print(strWork)
                 
@@ -568,7 +607,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
                 if(list!.count > 1)
                 {
                 
-                    var strWork  = list![1]
+                    let strWork  = list![1]
                     usageType3 = strWork
                     print(strWork)
                 
@@ -602,19 +641,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         }
         else if(title ==  "m1")
         {
-           // CoreDataManager.shared.getCommand(query: "")
-            
-           // m1--username
-            
-            let jsString1 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "'"
+       
+            getUserType(condition: "Windows")
+            let jsString0 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "'"
              
-            webView.evaluateJavaScript(jsString1) { (result, error) in
+            webView.evaluateJavaScript(jsString0) { (result, error) in
             
                     // 로그인 이름 설정
               
                 
             }
-            
+        
             
         }
         
