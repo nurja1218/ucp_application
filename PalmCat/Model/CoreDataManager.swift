@@ -133,7 +133,204 @@ class CoreDataManager: NSObject {
         
         
     }
+    func saveAppList(name:String, type: String, group: String,
+                  process: String, etc:String, onSuccess: @escaping ((Bool) -> Void)) {
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                                           = NSFetchRequest<NSManagedObject>(entityName: "AppList")
+                                   
+               
+            fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+                                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+            
+                if(fetchResult.count == 0)
+                {
+                    
+                    let entity: NSEntityDescription
+                        = NSEntityDescription.entity(forEntityName: "AppList", in: context)!
+                        
+                    let user: AppList = (NSManagedObject(entity: entity, insertInto: context) as? AppList)!
+                    
+                    user.name = name
+                    user.type = type
+                    user.group = group
+                    user.etc = etc
+                    user.process = process
+                    
+                    contextSave { success in
+                        onSuccess(success)
+                    }
+                }
+                else
+                {
+                    
+                    
+                    fetchResult[0].setValue(name, forKey: "name")
+                    fetchResult[0].setValue(type, forKey: "type")
+                    fetchResult[0].setValue(group, forKey: "group")
+                                
+                    fetchResult[0].setValue(etc, forKey: "etc")
+                              
+                    fetchResult[0].setValue(process, forKey: "process")
+                     
+                  
+                    contextSave { success in
+                        onSuccess(success)
+                    }
+
+                }
+            }
+        }
+        
+        
+    }
+    func saveCommand(name:String, type: String, group: String,
+                  gesture: String, shortcut:String, onSuccess: @escaping ((Bool) -> Void)) {
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                                           = NSFetchRequest<NSManagedObject>(entityName: "Command")
+                                   
+               
+            fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+                                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+            
+                if(fetchResult.count == 0)
+                {
+                    
+                    let entity: NSEntityDescription
+                        = NSEntityDescription.entity(forEntityName: "Command", in: context)!
+                        
+                    let user: Command = (NSManagedObject(entity: entity, insertInto: context) as? Command)!
+                    
+                    user.name = name
+                    user.type = type
+                    user.group = group
+                    user.gesture = gesture
+                    user.shortcut = shortcut
+                    
+                    contextSave { success in
+                        onSuccess(success)
+                    }
+                }
+                else
+                {
+                    
+                    
+                    fetchResult[0].setValue(name, forKey: "name")
+                    fetchResult[0].setValue(type, forKey: "type")
+                    fetchResult[0].setValue(group, forKey: "group")
+                                
+                    fetchResult[0].setValue(gesture, forKey: "gesture")
+                              
+                    fetchResult[0].setValue(shortcut, forKey: "shortcut")
+                     
+                  
+                    contextSave { success in
+                        onSuccess(success)
+                    }
+
+                }
+            }
+        }
+        
+        
+    }
+    func getCommand(query:String) -> Command    {
+        //let query = "Rob"
+        
+        var model: Command = Command()
+        
+    //    let request: NSFetchRequest<Users> = Users.fetchRequest()
     
+        if let context = context {
+            
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "Command")
+                      
+                 
+                 // The == syntax may also be used to search for an exact match
+                 fetchRequest.predicate = NSPredicate(format: "name == %@", query)
+                  
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+                     //let name = fetchResult.name
+                     
+                     //let id = fetchResult.userid
+                     if(fetchResult.count > 0)
+                     {
+                         print("find")
+                        
+                        for listEntity in fetchResult {
+                            let app = listEntity as! Command
+                            
+                           
+                            model = app
+                            return model
+                          
+                        }
+                     }
+                     
+                     
+                           // model = fetchResult
+                 }
+            
+        }
+     
+      
+        return model
+        
+    }
+    func getAppList(query:String) -> AppList    {
+        //let query = "Rob"
+        
+        var model: AppList = AppList()
+        
+    //    let request: NSFetchRequest<Users> = Users.fetchRequest()
+    
+        if let context = context {
+            
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "AppList")
+                      
+                 
+                 // The == syntax may also be used to search for an exact match
+                 fetchRequest.predicate = NSPredicate(format: "name == %@", query)
+                  
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+                     //let name = fetchResult.name
+                     
+                     //let id = fetchResult.userid
+                     if(fetchResult.count > 0)
+                     {
+                         print("find")
+                        
+                        for listEntity in fetchResult {
+                            let app = listEntity as! AppList
+                            
+                           
+                            model = app
+                            return model
+                          
+                        }
+                     }
+                     
+                     
+                           // model = fetchResult
+                 }
+            
+        }
+     
+      
+        return model
+        
+    }
     func saveUserList(type:String, id: Int, answer: String,
                   onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context {

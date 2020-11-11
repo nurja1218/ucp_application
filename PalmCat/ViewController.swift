@@ -67,6 +67,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
       
        
         getServerUserList()
+        getServerAppList()
+        getServerCommand()
         
       /*
         
@@ -111,6 +113,76 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         }
               
     }
+    func getServerAppList()
+    {
+    
+        connectDB()
+        
+
+        let query = OHMySQLQueryRequestFactory.select("applist", condition: nil)
+        
+        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        
+        for _dict in ( response! as! NSArray)
+        {
+            let dict:[String:Any] = _dict as! [String:Any]
+            let group  = dict["app_GroupName"] as? String
+            
+            
+            let name  = dict["app_Name"] as? String
+            
+            let type  = dict["app_TypeName"] as? String
+            let process  = dict["process_Name"] as? String
+            
+            var etc  = dict["etc"] as? String
+            if(etc == nil)
+            {
+                etc = ""
+            }
+                     
+            CoreDataManager.shared.saveAppList(name: name!, type: type!, group: group!, process: process!, etc: etc!, onSuccess: { (success) in
+                
+                print("success")
+            })
+            
+            
+        }
+              
+    }
+    func getServerCommand()
+     {
+     
+         connectDB()
+         
+
+         let query = OHMySQLQueryRequestFactory.select("command", condition: nil)
+         
+         let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+         
+         for _dict in ( response! as! NSArray)
+         {
+             let dict:[String:Any] = _dict as! [String:Any]
+            let group  = dict["app_GroupName"] as? String
+            let shortcut = dict["shortcut"] as? String
+            var gesture = dict["gesture"] as? String
+            let type = dict["app_TypeName"] as? String
+            
+            if(gesture == nil)
+            {
+                gesture = ""
+            }
+                  
+            print(dict)
+            
+            CoreDataManager.shared.saveCommand(name: group!, type: type!, group: group!, gesture: gesture!, shortcut: shortcut!, onSuccess: { (success) in
+                           
+                print("success")
+                       
+            })
+             
+         }
+               
+     }
     
     override func viewWillAppear() {
         self.view.window?.center()
@@ -451,8 +523,41 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
                 
                 }
                 decisionHandler(.allow)
+
+                
+                let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.6", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+                
+                self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                
                        
             }
+            if(navigationAction.request.url?.absoluteString.contains("tutorial.html") == true)
+            {
+                   
+               
+                decisionHandler(.allow)
+
+                
+                let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.17", ofType: "html", inDirectory:"www/ucp-v03-t")!)
+                
+                self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                
+                       
+            }
+            if(navigationAction.request.url?.absoluteString.contains("initial.html") == true)
+            {
+                   
+               
+                decisionHandler(.allow)
+
+                
+                let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+                
+                self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                
+                       
+            }
+            //initial.html
 
             if(navigationAction.request.url?.absoluteString.contains("NO.7.html") == true)
             {
@@ -491,9 +596,25 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         let title = webView.title
         if( title == "c2")
         {
-            print(title)
-         
+    
             timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
+            
+        }
+        else if(title ==  "m1")
+        {
+           // CoreDataManager.shared.getCommand(query: "")
+            
+           // m1--username
+            
+            let jsString1 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "'"
+             
+            webView.evaluateJavaScript(jsString1) { (result, error) in
+            
+                    // 로그인 이름 설정
+              
+                
+            }
+            
             
         }
         
@@ -519,17 +640,40 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         loadIntro()
 
         NSWorkspace.shared.launchApplication("Pero")
+        getApplication()
     }
+ 
+    let query = NSMetadataQuery()
+      
+    func getApplication()
+    {
+    
+        let predicate = NSPredicate(format: "kMDItemKind == 'Application'")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didRecieveWorkMainNotification(_:)), name: NSNotification.Name(rawValue: "NSMetadataQueryDidFinishGatheringNotification"), object: nil)
+        
+        query.predicate = predicate
+        query.start()
+           
+      //  NSNotification.
+    
+    }
+      @objc func didRecieveWorkMainNotification(_ notification: Notification) {
+         // print("Test Notification")
+    
+        for i in 0...query.resultCount
+        {
+          //  let dict = query.results[i] as? [String:Any]
+            //print (dict)
+          //  let name  = dict.va
+        }
+          //processUrl()
+      }
+    
    
     func connectDB()
     {
-        /*
-         host: palmcat.co.kr
-         port: 3306
-         url: palmcat.co.kr:3306
-         id: dev01
-         passward: palmcatDEV0!`
-         */
+       
         let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "106.10.42.103", dbName: "jcp_db", port: 3306, socket: nil)
         let coordinator = OHMySQLStoreCoordinator(user: user!)
         coordinator.encoding = .UTF8MB4
@@ -549,24 +693,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate{
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
           
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
-        /*
-        if(userID == nil || userID?.count == 0)
-        {
-            
-            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
-              
-            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
-            
-        }
-        else
-        {
-            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
-              
-            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
-
-        }
- */
-          
+     
 
     }
     func startUsageType()
