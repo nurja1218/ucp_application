@@ -31,11 +31,16 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     var usageType:String = ""
     
+    var oldCommand:String = ""
+    
     var user:Users!
     
     var selectedApplication = "MacOS"
     var selectedGestureIndex:Int = 0
     var selectedGestureOldIndex:Int = 0
+    
+    var selectedGesture = "L"
+    var selectedOldGesture = "L"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +77,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
        
         getServerUserList()
         getServerAppList()
-        getServerCommand()
+     //   getServerCommand()
         
      /*
         
@@ -88,6 +93,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
  */
           
     }
+    
+    
+   
    
     func getServerUserList()
     {
@@ -273,16 +281,20 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
     
      //   connectDB()
-        
-        let c = "app_Name =" + "'" + condition + "'" + " && touch='t4'"
+        let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t3")
+         
+        /*
+        let c = "app_Name =" + "'" + condition + "'" + " && touch='t3'"
         
         let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
         
         let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        */
+          
+        var option = String()
         
-            var option = String()
-        
-        if ( response == nil || (response! as! NSArray).count == 0)
+       // if ( response == nil || (response! as! NSArray).count == 0)
+        if(commands.count == 0)
         {
             option.append("<option>")
                                 
@@ -312,6 +324,25 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         option.append("<option>")
         option.append("Select one...")
         option.append("</option>")
+        
+        
+        for command in commands
+        {
+            if( command.enable == nil || command.enable == false )
+              {
+                    option.append("<option>")
+                  
+              }
+              else
+              {
+                    option.append("<option disabled>")
+                  
+              }
+            option.append(command.command!)
+              option.append("</option>")
+            
+        }
+        /*
             
         for _dict in ( response! as! NSArray)
         {
@@ -327,8 +358,19 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               
             let touch  = dict["touch"] as? String
 
+            let enable  = dict["enable"] as? Bool
+
                
-            option.append("<option>")
+            if( enable == nil || enable == false )
+            {
+                  option.append("<option>")
+                
+            }
+            else
+            {
+                  option.append("<option disabled>")
+                
+            }
             option.append(command!)
             option.append("</option>")
                                            
@@ -336,6 +378,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               
         
         }
+ */
         /*
         var gestureScript = ""
         
@@ -384,7 +427,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
         //connectDB()
         
-        let c = "app_Name =" + "'" + condition + "'" + " && touch='t5'"
+        let c = "app_Name =" + "'" + condition + "'" + " && touch='t4'"
         
         let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
         
@@ -541,15 +584,56 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                   
             print(dict)
             
-            CoreDataManager.shared.saveCommand(name: group!, type: type!, group: group!, gesture: gesture!, shortcut: shortcut!, onSuccess: { (success) in
-                           
-                print("success")
-                       
-            })
              
          }
                
      }
+    func initLocalCommandDB()
+    {
+        
+       
+        CoreDataManager.shared.deleteCommands()
+        let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: nil )
+        
+        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+        
+        
+        for _dict in ( response! as! NSArray)
+        {
+            /*
+             "app_Id" = 1;
+                "app_Name" = Youtube;
+                command = Mute;
+                gesture = RD;
+                id = 7;
+                shortcut = m;
+                touch = t3;
+             */
+         
+            let dict:[String:Any] = _dict as! [String:Any]
+        
+            let name =  dict["app_Name"] as? String
+         
+            let command =  dict["command"] as? String
+          
+            let shortcut =  dict["shortcut"] as? String
+          
+            var touch =  dict["touch"] as? String
+            if(touch == nil)
+            {
+                touch = ""
+            }
+            else
+            {
+                print(touch)
+            }
+            CoreDataManager.shared.saveCommand(name: name!, type: user.type!, group: name!, gesture: "", shortcut: shortcut!, command: command!, enable: false, touch:touch!,onSuccess:{ (success) in
+            })
+        
+        }
+           
+       
+    }
     
     override func viewWillAppear() {
         self.view.window?.center()
@@ -920,11 +1004,14 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                     let country = user.country
                     let name = user.name
                     
+                    
+                    
                     CoreDataManager.shared.saveUser(name: name! , id: id!, password: password!, country: country!,answer: usageType, type:ret, onSuccess:{ (success) in
                                                                                                
                     
                         print(success)
-                        
+                    
+                        self.initLocalCommandDB()
                                                                                       
                     })
                     
@@ -982,6 +1069,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                    
                
+                initLocalCommandDB()
                 decisionHandler(.allow)
 
                 
@@ -1168,13 +1256,62 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
            
             print("message: \(msg)")
+           
+            let type =  CoreDataManager.shared.getUserType(query: usageType)
+            
+            //let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t3")
+          //  command.command = msg
+            if( selectedGesture == selectedOldGesture)
+            {
+                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
+                                                              command: oldCommand, enable:false,touch:"t3", onSuccess: { (success) in
+                                                               
+                        
+                })
+            }
+            
+               
+            self.oldCommand = msg
+            selectedOldGesture = selectedGesture
+                   
+            
+            CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
+                                               command: msg, enable:true,touch:"t3", onSuccess: { (success) in
+                                                
+                                                
+            })
+              
+            getUserType(condition: selectedApplication)
+            
+            getUserType2(condition: selectedApplication)
             
         }
         else if(msg2.contains("t4") == true) // touch 4
         {
               
             print("message: \(msg)")
+            let type =  CoreDataManager.shared.getUserType(query: usageType)
+                   
+          //  let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t4")
+         
+           // command.command = msg
+            if(oldCommand.count > 0)
+            {
+                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
+                                                              command: oldCommand, enable:false,touch:"t4", onSuccess: { (success) in
+                                                               
+                        
+                })
+            }
             
+            self.oldCommand = msg
+            
+             
+            CoreDataManager.shared.updateCommand(name: selectedApplication, type: type, group: selectedApplication, gesture: "t3", shortcut: "",
+                                               command: msg, enable:true, touch:"t4",onSuccess: { (success) in
+                       
+                
+            })
         }
         
         else if(msg2 == "OPT")
@@ -1228,71 +1365,106 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                      
                   
             }
+            if(selectedGestureIndex != selectedGestureOldIndex)
+            {
+                oldCommand = ""
+            }
             if( num == "00")
             {
                 selectedGestureIndex = 0
+                selectedGesture = "L"
             }
             else if( num == "01")
             {
-                
-                
                 selectedGestureIndex = 1
+                selectedGesture = "R"
             }
             else if( num == "02")
             {
-                   selectedGestureIndex = 2
+
+                selectedGestureIndex = 2
+                selectedGesture = "U"
+
             }
             else if( num == "03")
             {
                 selectedGestureIndex = 3
+                selectedGesture = "D"
+
             }
             else if( num == "04")
             {
                 selectedGestureIndex = 4
+                selectedGesture = "LU"
+
             }
             else if( num == "05")
             {
-                   selectedGestureIndex = 5
+
+                selectedGestureIndex = 5
+                selectedGesture = "RU"
+
             }
             else if( num == "06")
             {
                 selectedGestureIndex = 6
+                selectedGesture = "LD"
+
             }
             else if( num == "07")
             {
                 selectedGestureIndex = 7
+                selectedGesture = "RD"
+
             }
             else if( num == "08")
             {
-                 selectedGestureIndex = 8
+
+                selectedGestureIndex = 8
+                selectedGesture = "LULD"
+
             }
             else if( num == "09")
             {
                 selectedGestureIndex = 9
+                selectedGesture = "RURD"
+
             }
             else if( num == "10")
             {
                 selectedGestureIndex = 10
+                selectedGesture = "LDLU"
+
             }
             else if( num == "11")
             {
                 selectedGestureIndex = 11
+                selectedGesture = "RDRU"
+
             }
             else if( num == "12")
             {
                 selectedGestureIndex = 12
+                selectedGesture = "LUC"
+
             }
             else if( num == "13")
             {
                 selectedGestureIndex = 13
+                selectedGesture = "LDC"
+
             }
             else if( num == "14")
             {
                 selectedGestureIndex = 14
+                selectedGesture = "RUC"
+
             }
             else if( num == "15")
             {
                 selectedGestureIndex = 15
+                selectedGesture = "RDC"
+
             }
             
             var oldNode = getGestureNodeStr(index: selectedGestureOldIndex)
@@ -1313,7 +1485,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
             curSub =  curSub + ".classList.add('w--tab-active');"
 
-                 
             webView.evaluateJavaScript(oldNode + curNode + oldSub + curSub) { (result, error) in
 
                 self.getUserType(condition: self.selectedApplication)
@@ -1324,6 +1495,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                   
             
             selectedGestureOldIndex = selectedGestureIndex
+            
+             
              
     
             
