@@ -857,6 +857,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 setUserEnvironment()
              
             }
+            if(navigationAction.request.url?.absoluteString.contains("no.9-1.html") == true)
+            {
+                setUserIndex()
+            }
+            //
             if(navigationAction.request.url?.absoluteString.contains("NO.6.html") == true)
             {
                    
@@ -1467,6 +1472,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     func setUserEnvironment()
     {
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.8", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+    }
+    func setUserIndex()
+    {
+        //NO.9-1.html
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.9-1", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+       
+        
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
 
     }
