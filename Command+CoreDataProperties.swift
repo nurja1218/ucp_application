@@ -18,9 +18,10 @@ extension Command {
 
     @NSManaged public var gesture: String?
     @NSManaged public var group: String?
-    @NSManaged public var userid: String?
-    @NSManaged public var type: String?
-    @NSManaged public var shortcut: String?
     @NSManaged public var name: String?
+    @NSManaged public var shortcut: String?
+    @NSManaged public var type: String?
+    @NSManaged public var userid: String?
+    @NSManaged public var enable: Bool
 
 }

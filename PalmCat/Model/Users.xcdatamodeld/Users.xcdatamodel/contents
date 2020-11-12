@@ -8,6 +8,7 @@
         <attribute name="type" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Command" representedClassName="Command" syncable="YES" codeGenerationType="class">
+        <attribute name="enable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="gesture" optional="YES" attributeType="String"/>
         <attribute name="group" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -30,7 +31,7 @@
     </entity>
     <elements>
         <element name="AppList" positionX="72" positionY="108" width="128" height="118"/>
-        <element name="Command" positionX="136.78125" positionY="116.56640625" width="128" height="133"/>
+        <element name="Command" positionX="136.78125" positionY="116.56640625" width="128" height="148"/>
         <element name="UserList" positionX="54" positionY="90" width="128" height="88"/>
         <element name="Users" positionX="-63" positionY="-18" width="128" height="133"/>
     </elements>
