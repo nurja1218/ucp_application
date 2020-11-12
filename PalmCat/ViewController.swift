@@ -117,6 +117,158 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
               
     }
+    
+    func getSelectEventListener() -> String
+    {
+        let script =
+            "document.getElementsByClassName('select-field')[1]." +
+                "addEventListener('change', function(event){ " +
+                "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+                "}); " + // L1
+        "document.getElementsByClassName('select-field')[2]." +
+            "addEventListener('change', function(event){ " +
+            "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+            "}); "  +   // L1
+
+        "document.getElementsByClassName('select-field')[4]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); "  + // L2
+        "document.getElementsByClassName('select-field')[5]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); "  + // L2
+
+        "document.getElementsByClassName('select-field')[7]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + //L3
+        "document.getElementsByClassName('select-field')[8]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + //L3
+      
+        "document.getElementsByClassName('select-field')[10]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L4
+        "document.getElementsByClassName('select-field')[11]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L4
+
+        "document.getElementsByClassName('select-field')[13]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L5
+        "document.getElementsByClassName('select-field')[14]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L5
+
+        "document.getElementsByClassName('select-field')[16]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L6
+        "document.getElementsByClassName('select-field')[17]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L6
+
+        "document.getElementsByClassName('select-field')[19]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L7
+        "document.getElementsByClassName('select-field')[20]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L7
+
+        "document.getElementsByClassName('select-field')[22]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L8
+        "document.getElementsByClassName('select-field')[23]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L8
+
+        "document.getElementsByClassName('select-field')[25]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L9
+        "document.getElementsByClassName('select-field')[26]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L9
+
+        "document.getElementsByClassName('select-field')[28]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L10
+        "document.getElementsByClassName('select-field')[29]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L10
+
+        "document.getElementsByClassName('select-field')[31]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L11
+        "document.getElementsByClassName('select-field')[32]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L11
+
+        "document.getElementsByClassName('select-field')[34]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L12
+        "document.getElementsByClassName('select-field')[35]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L12
+
+        "document.getElementsByClassName('select-field')[37]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L13
+        "document.getElementsByClassName('select-field')[38]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L13
+
+        "document.getElementsByClassName('select-field')[40]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L14
+        "document.getElementsByClassName('select-field')[41]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L14
+
+        "document.getElementsByClassName('select-field')[43]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L15
+        "document.getElementsByClassName('select-field')[44]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); " + // L15
+
+        "document.getElementsByClassName('select-field')[46]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); " +
+             "}); " + // L16
+        "document.getElementsByClassName('select-field')[47]." +
+             "addEventListener('change', function(event){ " +
+             "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t4'); " +
+             "}); "  // L16
+
+        
+        return script
+    }
+    
     func getUserType(condition:String)
     {
     
@@ -184,18 +336,32 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               
         
         }
-        
+        /*
         var gestureScript = ""
         
-                 
-            
+                
+        
+            "var sel1 = document.getElementById('field-3');  sel1.addEventListener('change', function(event){ "
+            +   "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); }); "
+            +   "var sel2 = document.getElementById('field-2'); "
+            +   "sel2.addEventListener('change', function(event){ "
+            +   "               window.webkit.messageHandlers.iosListener0.postMessage(event.target.value+'/t4'); }); "
+        */
+        var gestureSrcript = getGestureNodeStr(index: selectedGestureIndex)
+           
+        gestureSrcript =  gestureSrcript + ""
         let script =
                    
                     "var sel0 = document.getElementsByClassName('select-field')" + "[" + String( 3 * selectedGestureIndex) + "].disabled = true;" +
                      "var sel = document.getElementsByClassName('select-field')" + "[" + String( 3 * selectedGestureIndex + 1) + "];" +
                            "sel.disabled = false; sel.innerHTML = " +
                            
-                          "'" + option + "'"
+                          "'" + option + "';"
+                        /*
+                        +
+                        "sel.addEventListener('change', function(event){ "
+                        +   "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); }); "
+                    */
          
 
         
@@ -292,8 +458,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
                 "sel.disabled = false; sel.innerHTML = " +
                 
-                "'" + option + "'"
-               
+                "'" + option + "';"
+                    /*
+                    +
+               "sel.addEventListener('change', function(event){ "
+               +   "               window.webkit.messageHandlers.iosListener0.postMessage(event.target.value+'/t4'); }); "
+               */
                 
                webView.evaluateJavaScript(script) { (result, error) in
                              
@@ -895,13 +1065,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
            
     
-        if(msg2 == "t3") // touch 3
+        if(msg2.contains("t3") == true) // touch 3
         {
            
             print("message: \(msg)")
             
         }
-        else if(msg2 == "t4") // touch 4
+        else if(msg2.contains("t4") == true) // touch 4
         {
               
             print("message: \(msg)")
@@ -931,6 +1101,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             //
             getUserType(condition: selectedApplication)
             getUserType2(condition: selectedApplication)
+            
+            var oldNode = getGestureNodeStr(index: selectedGestureOldIndex)
+            
+            oldNode = oldNode + ".click()"
+            
+                      
+                               
+            
+            webView.evaluateJavaScript(oldNode ) { (result, error) in
+                         
+            }
+            
 
         }
                 
@@ -1059,13 +1241,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         let config = WKWebViewConfiguration()
                   
+        let str =  getSelectEventListener()
+
         let source =
-            "var sel1 = document.getElementById('field-3');  sel1.addEventListener('change', function(event){ "
-        +   "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); }); "
-        +   "var sel2 = document.getElementById('field-2'); "
-        +   "sel2.addEventListener('change', function(event){ "
-        +   "               window.webkit.messageHandlers.iosListener0.postMessage(event.target.value+'/t4'); }); "
-        +   "var x = document.getElementsByClassName('text-block-3');"
+           "var x = document.getElementsByClassName('text-block-3');"
         +   "    x[0].addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[0].innerHTML + 'OPT');"
         +   "   });"
@@ -1169,7 +1348,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         +   "g16.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L16' + 'g15');"
         +   "});"
-
+        + str
+     
         
         
         let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
