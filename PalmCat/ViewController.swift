@@ -74,7 +74,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         getServerAppList()
         getServerCommand()
         
-      /*
+     /*
         
         let query2 = OHMySQLQueryRequestFactory.select("user_b", condition: nil)
         
@@ -84,8 +84,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             print(dict)
         }
- */
  
+ */
           
     }
    
@@ -760,6 +760,82 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         
     }
+    func getApplicationAnchorNode(index:Int) -> String
+    {
+        
+        
+        var script = "document.getElementById"
+        
+        if(index == 0)
+        {
+            script = script + "('MacOS')"
+        }
+        if(index == 1)
+        {
+            script = script + "('Pages')"
+        }
+        if(index == 2)
+        {
+            script = script + "('Keynote')"
+        }
+        if(index == 3)
+        {
+            script = script + "('Numbers')"
+        }
+        if(index == 4)
+        {
+            script = script + "('Safari')"
+        }
+        if(index == 5)
+        {
+            script = script + "('Chrome')"
+        }
+        if(index == 6)
+        {
+            script = script + "('Firefox')"
+        }
+        if(index == 7)
+        {
+            script = script + "('Youtube')"
+        }
+        if(index == 8)
+        {
+            script = script + "('Netflix')"
+        }
+        if(index == 9)
+        {
+            script = script + "('Google docs')"
+        }
+        if(index == 10)
+        {
+            script = script + "('Google spreadsheet')"
+        }
+        if(index == 11)
+        {
+            script = script + "('Google slides')"
+        }
+        if(index == 12)
+        {
+            script = script + "('MS Word')"
+        }
+        if(index == 13)
+        {
+            script = script + "('MS Excel')"
+        }
+        if(index == 14)
+        {
+            script = script + "('MS Power point')"
+        }
+        if(index == 15)
+        {
+            script = script + "('Evernote')"
+        }
+
+      
+       return script
+        
+       
+    }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
        
@@ -1272,43 +1348,22 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         let config = WKWebViewConfiguration()
                   
         let str =  getSelectEventListener()
+        
+        var script0 = String()
+        
+        script0 = "var x = document.getElementsByClassName('text-block-3');"
+        for i in 0..<16{
+            script0 = script0 + getApplicationAnchorNode(index: i) + ".addEventListener('click', function(){ "
+            +   "       window.webkit.messageHandlers.iosListener0.postMessage( x" + "[" + String(i) + "].innerHTML + 'OPT');"
+            +   "   });"
+                  
+              
+        }
+        
+        //getApplicationAnchorNode
 
         let source =
-           "var x = document.getElementsByClassName('text-block-3');"
-        +   "    x[0].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[0].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[1].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[1].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[2].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[2].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[3].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[3].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[4].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[4].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[5].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[5].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[6].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[6].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[7].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[7].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[8].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[8].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[9].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[9].innerHTML + 'OPT');"
-        +   "   });"
-        +   "    x[10].addEventListener('click', function(){ "
-        +   "       window.webkit.messageHandlers.iosListener0.postMessage( x[10].innerHTML + 'OPT');"
-        +   "   });"
-            
+            script0
         +   "var g1 = document.getElementById('w-node-564723dfef21-ac9b38a6');"
         +   "g1.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L1' + 'g00');"
