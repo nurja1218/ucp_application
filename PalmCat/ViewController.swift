@@ -33,9 +33,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     var user:Users!
     
-    var selectedApplication = "Windows"
+    var selectedApplication = "MacOS"
     var selectedGestureIndex:Int = 0
-    var selectedGestureOldIndex:Int = -1
+    var selectedGestureOldIndex:Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -522,6 +522,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
          
          let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
          
+        if( response == nil)
+        {
+            return
+        }
          for _dict in ( response! as! NSArray)
          {
              let dict:[String:Any] = _dict as! [String:Any]
@@ -944,7 +948,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
           decisionHandler(.allow)
     }
-    
+    // w--tab-active
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         //ready to be processed
         let title = webView.title
@@ -957,8 +961,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         else if(title ==  "m1")
         {
        
-            getUserType(condition: "Windows")
-            getUserType2(condition: "Windows")
+            getUserType(condition: selectedApplication)
+            getUserType2(condition: selectedApplication)
                 
             let jsString0 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "'"
              
@@ -1047,7 +1051,21 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
       
     }
+    func getGestureSubTargetStr(index:Int) -> String
+   
+    {
     
+        var ret:String = String()
+         
+        
+        ret = "document.getElementById('L" + String(index + 1) + "')"
+        
+ 
+
+         return ret
+     
+       
+     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
        
@@ -1201,24 +1219,31 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 selectedGestureIndex = 15
             }
             
-            if(selectedGestureOldIndex != -1)
-            {
-                
-                var oldNode = getGestureNodeStr(index: selectedGestureOldIndex)
-                oldNode = oldNode + ".classList.remove('w--current');"
-                       
-                var curNode = getGestureNodeStr(index: selectedGestureIndex)
-                
-                curNode =  curNode + "g.classList.add('w--current');"
+            var oldNode = getGestureNodeStr(index: selectedGestureOldIndex)
+            oldNode = oldNode + ".classList.remove('w--current');"
+              
+            var curNode = getGestureNodeStr(index: selectedGestureIndex)
+
+            curNode =  curNode + ".classList.add('w--current');"
+
+
+            //
+
+            var oldSub = getGestureSubTargetStr(index: selectedGestureOldIndex)
+
+            oldSub = oldSub + ".classList.remove('w--tab-active');"
+
+            var curSub = getGestureSubTargetStr(index: selectedGestureIndex)
+
+            curSub =  curSub + ".classList.add('w--tab-active');"
+
                  
-                          
-                webView.evaluateJavaScript(oldNode + curNode) { (result, error) in
-                
-                    self.getUserType(condition: self.selectedApplication)
-                    
-                    self.getUserType2(condition: self.selectedApplication)
-                    
-                }
+            webView.evaluateJavaScript(oldNode + curNode + oldSub + curSub) { (result, error) in
+
+                self.getUserType(condition: self.selectedApplication)
+
+                self.getUserType2(condition: self.selectedApplication)
+
             }
                   
             
