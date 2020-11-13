@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Gestures+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Gestures+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:AppList+CoreDataClass.swift">
    </FileRef>
    <FileRef

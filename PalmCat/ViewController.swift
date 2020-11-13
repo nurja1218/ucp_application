@@ -42,6 +42,22 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     var selectedGesture = "L"
     var selectedOldGesture = "L"
 
+    
+    
+    override func awakeFromNib() {
+    
+        if self.view.layer != nil {
+        
+            let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+               self.view.layer?.backgroundColor = color
+            webView.layer?.backgroundColor = color
+           
+        }
+
+       
+    }
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -60,6 +76,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
         //webView.configuration = webConfiguration
         webView.navigationDelegate = self
+        
+  
+        
+        let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        
+        self.view.layer?.backgroundColor = color
+        
+        webView.wantsLayer = true
+        webView.layer?.backgroundColor = color
         
      //   let userController: WKUserContentController = WKUserContentController()
           
@@ -637,6 +662,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     override func viewWillAppear() {
         self.view.window?.center()
+        let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+
+        self.view.layer?.backgroundColor = color
+
+        webView.wantsLayer = true
+      //  webView.layer?.backgroundColor = color
+        
+        webView.setValue(false, forKey: "drawsBackground")
+        
+        webView.layer?.backgroundColor = NSColor.clear.cgColor;
+        
      
 
     }
@@ -1620,7 +1656,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                       
         
         webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 700), configuration: config)
-                        
+             
+        
+        let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+       
+        webView.wantsLayer = true
+        
+      //  webView.isOpaque = false
+        webView.setValue(false, forKey: "drawsBackground")
+        webView.layer?.backgroundColor = NSColor.clear.cgColor;
+        
+        
         webView.navigationDelegate = self
         
                                    

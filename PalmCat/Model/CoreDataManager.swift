@@ -186,6 +186,58 @@ class CoreDataManager: NSObject {
         
         
     }
+    
+    func saveGesture(name:String, appName:String,
+                     shortcut:String,command:String,touch:String,onSuccess: @escaping ((Bool) -> Void)) {
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                                           = NSFetchRequest<NSManagedObject>(entityName: "Gestures")
+                                   
+               
+     //       fetchRequest.predicate = NSPredicate(format: "(name == %@)AND(command == %@)", name, command)
+                                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+            
+               let entity: NSEntityDescription
+                                    = NSEntityDescription.entity(forEntityName: "Command", in: context)!
+                           
+                  
+                if(fetchResult.count == 0)
+                {
+                
+                    let user: Gestures = (NSManagedObject(entity: entity, insertInto: context) as? Gestures)!
+                    user.name = name
+                    user.app_name = appName
+                    user.shortcut = shortcut
+                    user.command = command
+                    user.touch = touch
+                    
+                    contextSave { success in
+                        onSuccess(success)
+                    }
+
+                }
+                else
+                {
+                    
+                    fetchResult[0].setValue(name, forKey: "name")
+                    fetchResult[0].setValue(appName, forKey: "app_name")
+                    fetchResult[0].setValue(shortcut, forKey: "shortcut")
+                    fetchResult[0].setValue(command, forKey: "command")
+                    fetchResult[0].setValue(touch, forKey: "touch")
+                  
+                    contextSave { success in
+                          onSuccess(success)
+                      }
+                    
+                }
+                
+            }
+        }
+        
+        
+    }
     func updateCommand(name:String, type: String, group: String,
                      gesture: String, shortcut:String,command:String,enable:Bool, touch:String,onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context
