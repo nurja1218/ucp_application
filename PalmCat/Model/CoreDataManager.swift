@@ -187,7 +187,7 @@ class CoreDataManager: NSObject {
         
     }
     
-    func saveGesture(name:String, appName:String,
+    func saveGesture(code:String, name:String, appName:String,
                      shortcut:String,command:String,touch:String,onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context
         {
@@ -195,18 +195,21 @@ class CoreDataManager: NSObject {
                                            = NSFetchRequest<NSManagedObject>(entityName: "Gestures")
                                    
                
-     //       fetchRequest.predicate = NSPredicate(format: "(name == %@)AND(command == %@)", name, command)
+            fetchRequest.predicate = NSPredicate(format: "code == %@", code)
                                   
             if let fetchResult = try? context.fetch(fetchRequest)  {
             
                let entity: NSEntityDescription
-                                    = NSEntityDescription.entity(forEntityName: "Command", in: context)!
+                                    = NSEntityDescription.entity(forEntityName: "Gestures", in: context)!
                            
                   
                 if(fetchResult.count == 0)
                 {
                 
                     let user: Gestures = (NSManagedObject(entity: entity, insertInto: context) as? Gestures)!
+         
+                    user.code = code
+         
                     user.name = name
                     user.app_name = appName
                     user.shortcut = shortcut
@@ -221,6 +224,7 @@ class CoreDataManager: NSObject {
                 else
                 {
                     
+                    fetchResult[0].setValue(code, forKey: "code")
                     fetchResult[0].setValue(name, forKey: "name")
                     fetchResult[0].setValue(appName, forKey: "app_name")
                     fetchResult[0].setValue(shortcut, forKey: "shortcut")
@@ -237,6 +241,26 @@ class CoreDataManager: NSObject {
         }
         
         
+    }
+      
+    func getGesture(name:String, touch:String) -> [Gestures]   {
+   
+
+        if let context = context {
+        
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                                 = NSFetchRequest<NSManagedObject>(entityName: "Gestures")
+                         
+            
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+            
+                return fetchResult as! [Gestures]
+               
+            }
+            
+        }
+        
+        return []
     }
     func updateCommand(name:String, type: String, group: String,
                      gesture: String, shortcut:String,command:String,enable:Bool, touch:String,onSuccess: @escaping ((Bool) -> Void)) {
@@ -351,28 +375,10 @@ class CoreDataManager: NSObject {
                   
             if let fetchResult = try? context.fetch(fetchRequest)  {
                  
-                     //let name = fetchResult.name
-                     
-                     //let id = fetchResult.userid
-                /*
-                     if(fetchResult.count > 0)
-                     {
-                         print("find")
-                        
-                        for listEntity in fetchResult {
-                            let app = listEntity as! Command
-                            
-                           
-                            model = app
-                           
-                        }
-                     }
- */
-                    return fetchResult as! [Command]
-                     
-                     
-                           // model = fetchResult
-                 }
+ 
+                return fetchResult as! [Command]
+                
+            }
             
         }
      

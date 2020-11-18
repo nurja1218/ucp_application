@@ -21,5 +21,6 @@ extension Gestures {
     @NSManaged public var command: String?
     @NSManaged public var shortcut: String?
     @NSManaged public var touch: String?
+    @NSManaged public var code: String?
 
 }

@@ -15,6 +15,7 @@
 		1E57A111254A58680036BB95 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A110254A58680036BB95 /* NavigationBarView.swift */; };
 		1E57A114254A5DC00036BB95 /* PeroButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A113254A5DC00036BB95 /* PeroButton.swift */; };
 		1E77F589255D28280014C060 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 1E77F588255D28280014C060 /* www */; };
+		1E77F58B255E0E7C0014C060 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E77F58A255E0E7C0014C060 /* ModelManager.swift */; };
 		1E880EEF25524F2D000CB584 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E880EEE25524F2D000CB584 /* WebKit.framework */; };
 		1EA692BA255A9FB10089AD6D /* Users.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EA692B8255A9FB10089AD6D /* Users.xcdatamodeld */; };
 		1EA692DF255AA8190089AD6D /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA692DE255AA8190089AD6D /* CoreDataManager.swift */; };
@@ -33,6 +34,7 @@
 		1E57A110254A58680036BB95 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		1E57A113254A5DC00036BB95 /* PeroButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeroButton.swift; sourceTree = "<group>"; };
 		1E77F588255D28280014C060 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		1E77F58A255E0E7C0014C060 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		1E880EEE25524F2D000CB584 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		1EA692B9255A9FB10089AD6D /* Users.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Users.xcdatamodel; sourceTree = "<group>"; };
 		1EA692DE255AA8190089AD6D /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				1EA692B8255A9FB10089AD6D /* Users.xcdatamodeld */,
 				1EA692DE255AA8190089AD6D /* CoreDataManager.swift */,
+				1E77F58A255E0E7C0014C060 /* ModelManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E57A0D5254949EB0036BB95 /* ViewController.swift in Sources */,
+				1E77F58B255E0E7C0014C060 /* ModelManager.swift in Sources */,
 				1E57A114254A5DC00036BB95 /* PeroButton.swift in Sources */,
 				1EA692BA255A9FB10089AD6D /* Users.xcdatamodeld in Sources */,
 				1E57A0D3254949EB0036BB95 /* AppDelegate.swift in Sources */,

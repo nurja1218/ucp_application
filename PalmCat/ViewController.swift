@@ -7,9 +7,11 @@
 //
 
 import Cocoa
-import JSNavigationController
 import WebKit
 import OHMySQL
+
+import GameController
+
 /*
 private extension Selector {
     static let pushToNextViewController = #selector(ViewController.pushToNextViewController)
@@ -41,9 +43,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     var selectedGesture = "L"
     var selectedOldGesture = "L"
+    
+    var selectedCode = ModelManager.shared.Left()
+    var selectedOldCode = ModelManager.shared.Left()
 
-    
-    
+    var hidManager:IOHIDManager!
+
+    var gamepad:GCMicroGamepad!
     override func awakeFromNib() {
     
         if self.view.layer != nil {
@@ -116,6 +122,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
  
  */
+       
+          
+    
           
     }
     
@@ -451,15 +460,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
     
         //connectDB()
+         let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t4")
         
+        /*
         let c = "app_Name =" + "'" + condition + "'" + " && touch='t4'"
         
         let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
         
         let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+ */
         var option = String()
         
-        if ( response == nil || (response! as! NSArray).count == 0)
+        if ( commands.count == 0)
         {
             option.append("<option>")
                         
@@ -487,6 +499,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                       
             return
         }
+        /*
         if(( response! as! NSArray).count > 0 )
         {
             option.append("<option>")
@@ -539,7 +552,44 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                              
                }
         }
-       
+ */
+        option.append("<option>")
+        option.append("Select one...")
+        option.append("</option>")
+        
+        
+        for command in commands
+        {
+            if( command.enable == nil || command.enable == false )
+              {
+                    option.append("<option>")
+                  
+              }
+              else
+              {
+                    option.append("<option disabled>")
+                  
+              }
+            option.append(command.command!)
+              option.append("</option>")
+            
+        }
+        var gestureSrcript = getGestureNodeStr(index: selectedGestureIndex)
+        
+        gestureSrcript =  gestureSrcript + ""
+        
+        let script =
+        
+            
+                "var sel = document.getElementsByClassName('select-field')" + "[" + String( 3 * selectedGestureIndex + 2) + "];" +
+                
+                "sel.disabled = false; sel.innerHTML = " +
+                
+                "'" + option + "';"
+        
+       webView.evaluateJavaScript(script) { (result, error) in
+      
+        }
        
             
    
@@ -673,9 +723,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         webView.layer?.backgroundColor = NSColor.clear.cgColor;
         
-     
+       
 
     }
+   
     func Alert(question: String, text: String)  {
         let alert = NSAlert()
         alert.messageText = question
@@ -1149,6 +1200,111 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
           decisionHandler(.allow)
     }
     // w--tab-active
+    
+    func initApplication()
+    {
+        selectedGestureIndex = 0
+        selectedGestureOldIndex = 0
+        
+        selectedGesture = "L"
+        selectedOldGesture = "L"
+        
+        selectedCode = ModelManager.shared.Left()
+        selectedOldCode = ModelManager.shared.Left()
+
+        getUserType(condition: selectedApplication)
+        getUserType2(condition: selectedApplication)
+            
+        let jsString0 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "';"
+         
+        
+        
+        let str =  getSelectEventListener()
+        
+        getGestureNodeStr(index: 0)
+    
+        let source =
+            jsString0
+            +   "var g1 = " + getGestureNodeStr(index: 0) + ";"
+        +   "g1.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L1' + 'g00');"
+        +   "});"
+            +   "var g2 = " + getGestureNodeStr(index: 1) + ";"
+        +   "g2.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L2' + 'g01');"
+        +   "});"
+        
+        +   "var g3 = " + getGestureNodeStr(index: 2) + ";"
+        +   "g3.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L3' + 'g02');"
+        +   "});"
+            +   "var g4 = " + getGestureNodeStr(index: 3) + ";"
+        +   "g4.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L4' + 'g03');"
+        +   "});"
+            +   "var g5 = " + getGestureNodeStr(index: 4) + ";"
+        +   "g5.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L5' + 'g04');"
+        +   "});"
+            +   "var g6 = " + getGestureNodeStr(index: 5) + ";"
+        +   "g6.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L6' + 'g05');"
+        +   "});"
+            +   "var g7 = " + getGestureNodeStr(index: 6) + ";"
+        +   "g7.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L7' + 'g06');"
+        +   "});"
+            +   "var g8 = " + getGestureNodeStr(index: 7) + ";"
+        +   "g8.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L8' + 'g07');"
+        +   "});"
+           
+            +   "var g9 = " + getGestureNodeStr(index: 8) + ";"
+        +   "g9.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L9' + 'g08');"
+        +   "});"
+            
+            +   "var g10 = " + getGestureNodeStr(index: 9) + ";"
+        +   "g10.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L10' + 'g09');"
+        +   "});"
+            
+            +   "var g11 = " + getGestureNodeStr(index: 10) + ";"
+        +   "g11.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L11' + 'g10');"
+        +   "});"
+            +   "var g12 = " + getGestureNodeStr(index: 11) + ";"
+        +   "g12.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L12' + 'g11');"
+        +   "});"
+           
+            +   "var g13 = " + getGestureNodeStr(index: 12) + ";"
+        +   "g13.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L13' + 'g12');"
+        +   "});"
+            +   "var g14 = " + getGestureNodeStr(index: 13) + ";"
+        +   "g14.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L14' + 'g13');"
+        +   "});"
+            +   "var g15 = " + getGestureNodeStr(index: 14) + ";"
+        +   "g15.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L15' + 'g14');"
+        +   "});"
+            +   "var g16 = " + getGestureNodeStr(index: 15) + ";"
+        +   "g16.addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L16' + 'g15');"
+        +   "});"
+        + str
+     
+        
+        webView.evaluateJavaScript(source) { (result, error) in
+        
+                // 로그인 이름 설정
+          
+            
+        }
+    }
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         //ready to be processed
         let title = webView.title
@@ -1158,25 +1314,119 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
             
         }
-        else if(title ==  "m1")
+        else if(title ==  "m2-app1")
         {
        
-            getUserType(condition: selectedApplication)
-            getUserType2(condition: selectedApplication)
-                
-            let jsString0 = "document.getElementsByTagName('h6')[2].innerHTML = " + "'" + String(self.user.name!) + "'"
-             
-            webView.evaluateJavaScript(jsString0) { (result, error) in
-            
-                    // 로그인 이름 설정
-              
-                
-            }
-          
-            //
-        
+            selectedApplication = "MacOS"
+            initApplication()
             
         }
+        else if(title ==  "chrome")
+        {
+       
+            selectedApplication = "Chrome"
+            initApplication()
+            
+        }
+        else if(title ==  "evernote")
+        {
+       
+            selectedApplication = "Evernote"
+            initApplication()
+            
+        }
+        else if(title ==  "docs")
+        {
+       
+            selectedApplication = "Google docs"
+            initApplication()
+            
+        }
+        else if(title ==  "firefox")
+        {
+       
+            selectedApplication = "Firefox"
+            initApplication()
+            
+        }
+        else if(title ==  "keynote")
+        {
+       
+            selectedApplication = "Keynote"
+            initApplication()
+            
+        }
+        else if(title ==  "msexcel")
+        {
+       
+            selectedApplication = "MS Excel"
+            initApplication()
+            
+        }
+        else if(title ==  "msppt")
+        {
+       
+            selectedApplication = "MS Powerpoint"
+            initApplication()
+            
+        }
+        else if(title ==  "msword")
+        {
+       
+            selectedApplication = "MS Word"
+            initApplication()
+            
+        }
+        else if(title ==  "netflix")
+        {
+       
+            selectedApplication = "Netflix"
+            initApplication()
+            
+        }
+        else if(title ==  "numbers")
+        {
+       
+            selectedApplication = "Numbers"
+            initApplication()
+            
+        }
+        else if(title ==  "pages")
+        {
+       
+            selectedApplication = "Pages"
+            initApplication()
+            
+        }
+        else if(title ==  "safari")
+        {
+       
+            selectedApplication = "Safari"
+            initApplication()
+            
+        }
+        else if(title ==  "slides")
+        {
+       
+            selectedApplication = "Google slides"
+            initApplication()
+            
+        }
+        else if(title ==  "spreadsheet")
+        {
+       
+            selectedApplication = "Google spreadsheet"
+            initApplication()
+            
+        }
+        else if(title ==  "youtube")
+        {
+       
+            selectedApplication = "Youtube"
+            initApplication()
+            
+        }
+        //
         
     }
     func getGestureNodeStr(index:Int) -> String
@@ -1184,67 +1434,67 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         var ret:String = String()
         if(index == 0)
         {
-            ret = "document.getElementById('w-node-564723dfef21-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b926667-be8be136')"
         }
         if(index == 1)
         {
-            ret = "document.getElementById('w-node-79cc6ab97542-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b926669-be8be136')"
         }
         if(index == 2)
         {
-            ret = "document.getElementById('w-node-95579da77bd2-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b92666b-be8be136')"
         }
         if(index == 3)
         {
-            ret = "document.getElementById('w-node-dad1676e0d33-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b92666d-be8be136')"
         }
         if(index == 4)
         {
-            ret = "document.getElementById('w-node-a1a3e9616227-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b92666f-be8be136')"
         }
         if(index == 5)
         {
-            ret = "document.getElementById('w-node-f6a103bd1d2f-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b926671-be8be136')" //
         }
         if(index == 6)
         {
-            ret = "document.getElementById('w-node-ece2b31bb864-ac9b38a6')"//
+            ret = "document.getElementById('w-node-4e0e9b926673-be8be136')"//
         }
         if(index == 7)
         {
-            ret = "document.getElementById('w-node-8a1acc0fa404-ac9b38a6')"//
+            ret = "document.getElementById('w-node-4e0e9b926675-be8be136')"//
         }
         if(index == 8)
         {
-            ret = "document.getElementById('w-node-fae6c0dc1d55-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b92667a-be8be136')" //
         }
         if(index == 9)
         {
-            ret = "document.getElementById('w-node-c7a8152b2124-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b92667c-be8be136')" //
         }
         if(index == 10)
         {
-            ret = "document.getElementById('w-node-afec249d2bb2-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b92667e-be8be136')" //
         }
         if(index == 11)
         {
-            ret = "document.getElementById('w-node-55bfbb2e8d16-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b926680-be8be136')" //
         }
         if(index == 12)
         {
-            ret = "document.getElementById('w-node-7733dff13436-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b926682-be8be136')" //
         }
         if(index == 13)
         {
-            ret = "document.getElementById('w-node-6ae5e178c622-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b926684-be8be136')" //
         }
         if(index == 14)
         {
-            ret = "document.getElementById('w-node-9657988b3af9-ac9b38a6')" //
+            ret = "document.getElementById('w-node-4e0e9b926686-be8be136')" //
         }
         if(index == 15)
         {
-            ret = "document.getElementById('w-node-822986547cd3-ac9b38a6')"
+            ret = "document.getElementById('w-node-4e0e9b926688-be8be136')"
         }
 
         return ret
@@ -1297,7 +1547,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             //let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t3")
           //  command.command = msg
-            if( selectedGesture == selectedOldGesture)
+            if( selectedCode == selectedOldCode)
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
                                                               command: oldCommand, enable:false,touch:"t3", onSuccess: { (success) in
@@ -1309,6 +1559,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                
             self.oldCommand = msg
             selectedOldGesture = selectedGesture
+            
+            selectedOldCode = selectedCode
                    
             
             CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
@@ -1331,7 +1583,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
           //  let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t4")
          
            // command.command = msg
-            if(oldCommand.count > 0)
+         
+            if( selectedCode == selectedOldCode)
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
                                                               command: oldCommand, enable:false,touch:"t4", onSuccess: { (success) in
@@ -1341,9 +1594,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             }
             
             self.oldCommand = msg
+           
+            selectedOldGesture = selectedGesture
             
-             
-            CoreDataManager.shared.updateCommand(name: selectedApplication, type: type, group: selectedApplication, gesture: "t3", shortcut: "",
+            selectedOldCode = selectedCode
+            CoreDataManager.shared.updateCommand(name: selectedApplication, type: type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
                                                command: msg, enable:true, touch:"t4",onSuccess: { (success) in
                        
                 
@@ -1409,29 +1664,34 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                 selectedGestureIndex = 0
                 selectedGesture = "L"
+                selectedCode = ModelManager.shared.Left()
             }
             else if( num == "01")
             {
                 selectedGestureIndex = 1
                 selectedGesture = "R"
+                selectedCode = ModelManager.shared.Right()
             }
             else if( num == "02")
             {
 
                 selectedGestureIndex = 2
                 selectedGesture = "U"
+                selectedCode = ModelManager.shared.Up()
 
             }
             else if( num == "03")
             {
                 selectedGestureIndex = 3
                 selectedGesture = "D"
+                selectedCode = ModelManager.shared.Down()
 
             }
             else if( num == "04")
             {
                 selectedGestureIndex = 4
                 selectedGesture = "LU"
+                selectedCode = ModelManager.shared.LeftUp()
 
             }
             else if( num == "05")
@@ -1439,67 +1699,82 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
                 selectedGestureIndex = 5
                 selectedGesture = "RU"
+                selectedCode = ModelManager.shared.RightUp()
 
             }
             else if( num == "06")
             {
                 selectedGestureIndex = 6
                 selectedGesture = "LD"
+                selectedCode = ModelManager.shared.LeftDown()
 
             }
             else if( num == "07")
             {
                 selectedGestureIndex = 7
                 selectedGesture = "RD"
+                selectedCode = ModelManager.shared.RightDown()
 
             }
             else if( num == "08")
             {
 
                 selectedGestureIndex = 8
-                selectedGesture = "LULD"
+                selectedGesture = "LUC"
+                selectedCode = ModelManager.shared.LeftUpCurve()
 
             }
             else if( num == "09")
             {
                 selectedGestureIndex = 9
-                selectedGesture = "RURD"
+                selectedGesture = "RUC"
+                selectedCode = ModelManager.shared.RightUpCurve()
 
             }
             else if( num == "10")
             {
                 selectedGestureIndex = 10
-                selectedGesture = "LDLU"
+                selectedGesture = "LDC"
+                selectedCode = ModelManager.shared.LeftDownCurve()
+
 
             }
             else if( num == "11")
             {
                 selectedGestureIndex = 11
-                selectedGesture = "RDRU"
+                selectedGesture = "RDC"
+                selectedCode = ModelManager.shared.RightDownCurve()
+
 
             }
             else if( num == "12")
             {
                 selectedGestureIndex = 12
-                selectedGesture = "LUC"
+                selectedGesture = "LURU"
+                selectedCode = ModelManager.shared.LeftUpRightUpCurve()
+
 
             }
             else if( num == "13")
             {
                 selectedGestureIndex = 13
-                selectedGesture = "LDC"
+                selectedGesture = "LDRD"
+                selectedCode = ModelManager.shared.LeftDownRightDownCurve()
 
             }
             else if( num == "14")
             {
                 selectedGestureIndex = 14
-                selectedGesture = "RUC"
+                selectedGesture = "RULU"
+                selectedCode = ModelManager.shared.RightUpLeftUpCurve()
+
 
             }
             else if( num == "15")
             {
                 selectedGestureIndex = 15
-                selectedGesture = "RDC"
+                selectedGesture = "RDLD"
+                selectedCode = ModelManager.shared.RightDownLeftDownCurve()
 
             }
             
@@ -1551,94 +1826,84 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     @objc func timerAction(){
              
         
-        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16", ofType: "html", inDirectory:"www/cup-v03-m")!)
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16_default", ofType: "html", inDirectory:"www/cup-v03-m")!)
         
         
         let config = WKWebViewConfiguration()
                   
-        let str =  getSelectEventListener()
         
-        var script0 = String()
-        
-        script0 = "var x = document.getElementsByClassName('text-block-3');"
-        for i in 0..<16{
-            script0 = script0 + getApplicationAnchorNode(index: i) + ".addEventListener('click', function(){ "
-            +   "       window.webkit.messageHandlers.iosListener0.postMessage( x" + "[" + String(i) + "].innerHTML + 'OPT');"
-            +   "   });"
-                  
-              
-        }
         
         //getApplicationAnchorNode
-
+        let str =  getSelectEventListener()
+    
         let source =
-            script0
-        +   "var g1 = document.getElementById('w-node-564723dfef21-ac9b38a6');"
+   
+            "var g1 = " + getGestureNodeStr(index: 0) + ";"
         +   "g1.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L1' + 'g00');"
         +   "});"
-        +   "var g2 = document.getElementById('w-node-79cc6ab97542-ac9b38a6');"
+            +   "var g2 = " + getGestureNodeStr(index: 1) + ";"
         +   "g2.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L2' + 'g01');"
         +   "});"
         
-        +   "var g3 = document.getElementById('w-node-95579da77bd2-ac9b38a6');"
+        +   "var g3 = " + getGestureNodeStr(index: 2) + ";"
         +   "g3.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L3' + 'g02');"
         +   "});"
-        +   "var g4 = document.getElementById('w-node-dad1676e0d33-ac9b38a6');"
+            +   "var g4 = " + getGestureNodeStr(index: 3) + ";"
         +   "g4.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L4' + 'g03');"
         +   "});"
-        +   "var g5 = document.getElementById('w-node-a1a3e9616227-ac9b38a6');"
+            +   "var g5 = " + getGestureNodeStr(index: 4) + ";"
         +   "g5.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L5' + 'g04');"
         +   "});"
-        +   "var g6 = document.getElementById('w-node-f6a103bd1d2f-ac9b38a6');"
+            +   "var g6 = " + getGestureNodeStr(index: 5) + ";"
         +   "g6.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L6' + 'g05');"
         +   "});"
-        +   "var g7 = document.getElementById('w-node-ece2b31bb864-ac9b38a6');"
+            +   "var g7 = " + getGestureNodeStr(index: 6) + ";"
         +   "g7.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L7' + 'g06');"
         +   "});"
-        +   "var g8 = document.getElementById('w-node-8a1acc0fa404-ac9b38a6');"
+            +   "var g8 = " + getGestureNodeStr(index: 7) + ";"
         +   "g8.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L8' + 'g07');"
         +   "});"
-            
-        +   "var g9 = document.getElementById('w-node-fae6c0dc1d55-ac9b38a6');"
+           
+            +   "var g9 = " + getGestureNodeStr(index: 8) + ";"
         +   "g9.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L9' + 'g08');"
         +   "});"
             
-        +   "var g10 = document.getElementById('w-node-c7a8152b2124-ac9b38a6');"
+            +   "var g10 = " + getGestureNodeStr(index: 9) + ";"
         +   "g10.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L10' + 'g09');"
         +   "});"
             
-        +   "var g11 = document.getElementById('w-node-afec249d2bb2-ac9b38a6');"
+            +   "var g11 = " + getGestureNodeStr(index: 10) + ";"
         +   "g11.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L11' + 'g10');"
         +   "});"
-        +   "var g12 = document.getElementById('w-node-55bfbb2e8d16-ac9b38a6');"
+            +   "var g12 = " + getGestureNodeStr(index: 11) + ";"
         +   "g12.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L12' + 'g11');"
         +   "});"
-            
-        +   "var g13 = document.getElementById('w-node-7733dff13436-ac9b38a6');"
+           
+            +   "var g13 = " + getGestureNodeStr(index: 12) + ";"
         +   "g13.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L13' + 'g12');"
         +   "});"
-        +   "var g14 = document.getElementById('w-node-6ae5e178c622-ac9b38a6');"
+            +   "var g14 = " + getGestureNodeStr(index: 13) + ";"
         +   "g14.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L14' + 'g13');"
         +   "});"
-        +   "var g15 = document.getElementById('w-node-9657988b3af9-ac9b38a6');"
+            +   "var g15 = " + getGestureNodeStr(index: 14) + ";"
         +   "g15.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L15' + 'g14');"
         +   "});"
-        +   "var g16 = document.getElementById('w-node-822986547cd3-ac9b38a6');"
+            +   "var g16 = " + getGestureNodeStr(index: 15) + ";"
         +   "g16.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L16' + 'g15');"
         +   "});"
@@ -1669,10 +1934,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         webView.navigationDelegate = self
         
-                                   
+                   
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
        
-        self.view.addSubview(webView)
+       self.view.addSubview(webView)
               
         
         timer.invalidate()

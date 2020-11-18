@@ -20,6 +20,7 @@
     </entity>
     <entity name="Gestures" representedClassName="Gestures" syncable="YES" codeGenerationType="class">
         <attribute name="app_name" optional="YES" attributeType="String"/>
+        <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="command" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="shortcut" optional="YES" attributeType="String"/>
@@ -43,6 +44,6 @@
         <element name="Command" positionX="136.78125" positionY="116.56640625" width="128" height="178"/>
         <element name="UserList" positionX="54" positionY="90" width="128" height="88"/>
         <element name="Users" positionX="-63" positionY="-18" width="128" height="133"/>
-        <element name="Gestures" positionX="72" positionY="153" width="128" height="118"/>
+        <element name="Gestures" positionX="72" positionY="153" width="128" height="133"/>
     </elements>
 </model>
