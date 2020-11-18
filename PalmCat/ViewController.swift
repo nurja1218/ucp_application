@@ -794,8 +794,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                                 if( (country as? String)!.count > 0)
                                                                 {
                                                                     CoreDataManager.shared.saveUser(name: name as! String, id: email as! String, password: pass0 as! String, country: (country as? String)!,answer: "", type:"", onSuccess:{ (success) in
-                                                                             
-                                                                        
+                                                                          
+                                                                        self.user = CoreDataManager.shared.getUser(query: email as! String)
+                                                                    
                                                                         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                                                         
                                                                         self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
