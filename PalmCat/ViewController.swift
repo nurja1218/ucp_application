@@ -568,7 +568,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                 return
             }
-            
+            CoreDataManager.shared.dbCnt = ( response! as! NSArray).count
             for _dict in ( response! as! NSArray)
             {
                 
@@ -639,7 +639,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 UserDefaults.standard.setValue(false, forKey: "INIT_DB")
                 UserDefaults.standard.synchronize()
                 
+            
                 CoreDataManager.shared.deleteCommands()
+          //     CoreDataManager.shared.deleteCommandsID(id: self.user.userid!)
+                
                 
                 UserDefaults.standard.set("",forKey: "USER_ID")
                 UserDefaults.standard.synchronize()

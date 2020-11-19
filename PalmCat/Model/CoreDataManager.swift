@@ -11,6 +11,8 @@ class CoreDataManager: NSObject {
     
     let modelName: String = "Users"
     
+    var dbCnt:Int = 0
+    
     func getUsers(ascending: Bool = false) -> [Users] {
         var models: [Users] = [Users]()
         
@@ -393,74 +395,33 @@ class CoreDataManager: NSObject {
                                             = NSFetchRequest<NSManagedObject>(entityName: "Command")
                                     
                 
-          //   fetchRequest.predicate = NSPredicate(format: "(userid==%@)","jimmy")
+             fetchRequest.predicate = NSPredicate(format: "(userid==%@)",id)
+            
                                    
              if let fetchResult = try? context.fetch(fetchRequest)  {
-             /*
-                if(fetchResult.count == 0)
-                {
-                    let entity: NSEntityDescription
-                                         = NSEntityDescription.entity(forEntityName: "Command", in: context)!
-                                         
-                                     let user: Command = (NSManagedObject(entity: entity, insertInto: context) as? Command)!
-                                     
-                                    user.userid = "jimmy"
-                                     user.name = name
-                                     user.type = type
-                                     user.group = group
-                                     user.gesture = gesture
-                                     user.shortcut = shortcut
-                                     user.command = command
-                                     user.enable = enable
-                                     user.touch = touch
-                //
-                                                     
-                                     contextSave { success in
-                                         onSuccess(success)
-                                     }
-                }
-                else
-                {
-                    fetchResult[0].setValue("jimmy", forKey: "userid")
-                    
-                    fetchResult[0].setValue(name, forKey: "name")
-                    
-                    fetchResult[0].setValue(group, forKey: "group")
-                    
-                   // fetchResult[0].setValue(gesture, forKey: "gesture")
-                    fetchResult[0].setValue(shortcut, forKey: "shortcut")
-                    fetchResult[0].setValue(command, forKey: "command")
-                    fetchResult[0].setValue(touch, forKey: "touch")
-                    
-                    contextSave { success in
-                                       
-                        onSuccess(success)
-                                           
-                                       
-                    }
-                }
- */
+ 
                 let entity: NSEntityDescription
                                      = NSEntityDescription.entity(forEntityName: "Command", in: context)!
                                      
                                  let user: Command = (NSManagedObject(entity: entity, insertInto: context) as? Command)!
-                                 
-                                user.userid = id
-                                 user.name = name
-                                 user.type = type
-                                 user.group = group
-                                 user.gesture = gesture
-                                 user.shortcut = shortcut
-                                 user.command = command
-                                 user.enable = enable
-                                 user.touch = touch
-            //
-                                                 
-                                 contextSave { success in
-                                     onSuccess(success)
-                                 }
-                
-                
+                      
+                if(fetchResult.count < dbCnt)
+                {
+                    user.userid = id
+                     user.name = name
+                     user.type = type
+                     user.group = group
+                     user.gesture = gesture
+                     user.shortcut = shortcut
+                     user.command = command
+                     user.enable = enable
+                     user.touch = touch
+//
+                                     
+                     contextSave { success in
+                         onSuccess(success)
+                     }
+                }
  
              }
          }
@@ -485,6 +446,10 @@ class CoreDataManager: NSObject {
            // fetchRequest.predicate = NSPredicate(format: "(name==%@)AND(touch==%@)", name, touch)
         
        //     fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)", name, touch)
+            let sort = NSSortDescriptor(key: #keyPath(Command.name), ascending: true)
+               
+            fetchRequest.sortDescriptors = [sort]
+               
    
             if let fetchResult = try? context.fetch(fetchRequest)  {
                  
@@ -589,6 +554,34 @@ class CoreDataManager: NSObject {
         }
         
     }
+    
+    func deleteCommandsID(id:String)
+    {
+        if let context = context {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Command")
+
+            fetchRequest.predicate = NSPredicate(format: "(userid==%@)", id)
+
+            // Create Batch Delete Request
+            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+            do {
+                try context.execute(batchDeleteRequest)
+                contextSave { success in
+                                   
+                    //onSuccess(success)
+                                       
+                                   
+                }
+
+            } catch {
+                // Error Handling
+                print("error")
+            }
+        }
+        
+    }
+    
     
     
     func getAppList(query:String) -> AppList    {
