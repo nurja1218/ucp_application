@@ -92,39 +92,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         webView.wantsLayer = true
         webView.layer?.backgroundColor = color
         
-     //   let userController: WKUserContentController = WKUserContentController()
-          
-      //  let userScript: WKUserScript = WKUserScript(source: "test01()", injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
-        
-      //  userController.addUserScript(userScript)
-          
-      //  userController.add(self, name: Constants.callBackHandlerKey)
-        // let configuration = WKWebViewConfiguration()
-      //   configuration.userContentController = userController
-        
-
-    //    let uuid = UUID().uuidString
-      
+   
        
-        getServerUserList()
-        getServerAppList()
-     //   getServerCommand()
-        
-     /*
-        
-        let query2 = OHMySQLQueryRequestFactory.select("user_b", condition: nil)
-        
-        let response2 = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query2)
-        
-        for dict in ( response2 as! NSArray)
-        {
-            print(dict)
-        }
- 
- */
-       
-          
-    
+   //     getServerUserList()
+   //     getServerAppList()
           
     }
     
@@ -317,14 +288,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
      //   connectDB()
         let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t3")
          
-        /*
-        let c = "app_Name =" + "'" + condition + "'" + " && touch='t3'"
-        
-        let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
-        
-        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
-        */
-          
+      
         var option = String()
         
        // if ( response == nil || (response! as! NSArray).count == 0)
@@ -363,10 +327,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         for command in commands
         {
-            if(command.name == condition)
-            {
-                
-            }
             
             if( command.enable == nil ||  command.gesture?.count == 0  )
               {
@@ -382,54 +342,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               option.append("</option>")
             
         }
-        /*
-            
-        for _dict in ( response! as! NSArray)
-        {
-            
-            let dict:[String:Any] = _dict as! [String:Any]
-            
-            let app_Name  = dict["app_Name"] as? String
-            let command  = dict["command"] as? String
-            let gesture  = dict["gesture"] as? String
-            
-               
-            let shortcut  = dict["shortcut"] as? String
-              
-            let touch  = dict["touch"] as? String
-
-            let enable  = dict["enable"] as? Bool
-
-               
-            if( enable == nil || enable == false )
-            {
-                  option.append("<option>")
-                
-            }
-            else
-            {
-                  option.append("<option disabled>")
-                
-            }
-            option.append(command!)
-            option.append("</option>")
-                                           
-                              
-              
-        
-        }
- */
-        /*
-        var gestureScript = ""
-        
-                
-        
-            "var sel1 = document.getElementById('field-3');  sel1.addEventListener('change', function(event){ "
-            +   "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); }); "
-            +   "var sel2 = document.getElementById('field-2'); "
-            +   "sel2.addEventListener('change', function(event){ "
-            +   "               window.webkit.messageHandlers.iosListener0.postMessage(event.target.value+'/t4'); }); "
-        */
+   
         var gestureSrcript = getGestureNodeStr(index: selectedGestureIndex)
            
         gestureSrcript =  gestureSrcript + ""
@@ -440,21 +353,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                            "sel.disabled = false; sel.innerHTML = " +
                            
                           "'" + option + "';"
-                        /*
-                        +
-                        "sel.addEventListener('change', function(event){ "
-                        +   "window.webkit.messageHandlers.iosListener0.postMessage(event.target.value + '/t3'); }); "
-                    */
-         
-
-        
-        /*
-             
-         
-                 
-                
-              +   "var g16 = document.getElementById('w-node-822986547cd3-ac9b38a6');"
-         */
+   
         
         webView.evaluateJavaScript(script) { (result, error) in
                       
@@ -468,13 +367,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         //connectDB()
          let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t4")
         
-        /*
-        let c = "app_Name =" + "'" + condition + "'" + " && touch='t4'"
-        
-        let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: c )
-        
-        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
- */
+  
         var option = String()
         
         if ( commands.count == 0)
@@ -485,8 +378,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             option.append("Not Selected")
             
             option.append("</option>")
-            //let script = "var sel2 = document.getElementsByTagName('select')[2];sel2.disabled = true; sel2.innerHTML = " + "'" + option + "'"
-              
+    
             let script =
                   
                       "var sel = document.getElementsByClassName('select-field')" + "[" + String( 3 * selectedGestureIndex + 2) + "];" +
@@ -505,60 +397,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                       
             return
         }
-        /*
-        if(( response! as! NSArray).count > 0 )
-        {
-            option.append("<option>")
-             
-            option.append("Select one...")
-            
-            option.append("</option>")
-            for _dict in ( response! as! NSArray)
-               {
-                   
-                   let dict:[String:Any] = _dict as! [String:Any]
-                   
-                   let app_Name  = dict["app_Name"] as? String
-                   let command  = dict["command"] as? String
-                   let gesture  = dict["gesture"] as? String
-                   
-                      
-                   let shortcut  = dict["shortcut"] as? String
-                     
-                   let touch  = dict["touch"] as? String
 
-                      
-                   option.append("<option>")
-                   option.append(command!)
-                   option.append("</option>")
-                                                  
-                                     
-                     
-               
-               }
-               
-            //   let script = "var sel = document.getElementsByTagName('select')[2]; sel.disabled = false;sel.innerHTML = " + "'" + option + "'"
-               
-            let script =
-            
-                "var sel = document.getElementsByClassName('select-field')" + "[" + String( 3 * selectedGestureIndex + 2) + "];" +
-                
-                "sel.disabled = false; sel.innerHTML = " +
-                
-                "'" + option + "';"
-                    /*
-                    +
-               "sel.addEventListener('change', function(event){ "
-               +   "               window.webkit.messageHandlers.iosListener0.postMessage(event.target.value+'/t4'); }); "
-               */
-                
-               webView.evaluateJavaScript(script) { (result, error) in
-                             
-                                 
-                             
-               }
-        }
- */
         option.append("<option>")
         option.append("Select one...")
         option.append("</option>")
@@ -717,7 +556,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         self.view.layer?.backgroundColor = color
 
         webView.wantsLayer = true
-      //  webView.layer?.backgroundColor = color
         
         webView.setValue(false, forKey: "drawsBackground")
         
@@ -738,7 +576,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     }
     func ConfirmDelete()  {
         let alert = NSAlert()
-        alert.messageText = "Delete the document?"
+        alert.messageText = ""
         alert.informativeText = "Are you sure you would like to delete all settings?"
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
@@ -898,6 +736,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                             {
                                        
                             
+                                UserDefaults.standard.set(self.user.userid!,forKey: "USER_ID")
+                                UserDefaults.standard.synchronize()
+                             
                                 
                                 let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                 
@@ -1042,6 +883,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
           
     
             }
+            if(navigationAction.request.url?.absoluteString.contains("main.html") == true)
+            {
+                  
+                
+                loadIntro()
+          
+    
+            }
+             
              
             if(navigationAction.request.url?.absoluteString.contains("signup.html") == true)
             {
@@ -1580,20 +1430,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
            
             let type =  CoreDataManager.shared.getUserType(query: usageType)
             
-            //let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t3")
-          //  command.command = msg
-            /*
-            if( selectedCode == selectedOldCode)
-            {
-                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
-                                                              command: oldCommand, enable:false,touch:"t3", onSuccess: { (success) in
-                                                               
-                        
-                })
-            }
- */
-         //   let commands = CoreDataManager.shared.getCommand(name: selectedApplication, touch: "t3")
-        
+      
             let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t3", gesture: selectedGesture)
             
             for command in commands
@@ -1630,19 +1467,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             print("message: \(msg)")
             let type =  CoreDataManager.shared.getUserType(query: usageType)
                    
-          //  let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t4")
-         
-           // command.command = msg
-         /*
-            if( selectedCode == selectedOldCode)
-            {
-                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
-                                                              command: oldCommand, enable:false,touch:"t4", onSuccess: { (success) in
-                                                               
-                        
-                })
-            }
-           */
+   
             let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t4", gesture: selectedGesture)
             
             for command in commands
@@ -1882,10 +1707,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
              
       */
     
-    
-    @objc func timerAction(){
-             
-        
+    func loadSettings()
+    {
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16_default", ofType: "html", inDirectory:"www/cup-v03-m")!)
         
         
@@ -1998,8 +1821,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
        
        self.view.addSubview(webView)
-              
-        
+    }
+    @objc func timerAction(){
+
+        loadSettings()
+
         timer.invalidate()
         
     }
@@ -2008,11 +1834,23 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         super.viewDidAppear()
         view.superview?.addConstraints(viewConstraints())
     
+        let userID = UserDefaults.standard.string(forKey: "USER_ID")
+        if(userID == nil || userID!.count == 0)
+        {
+            loadIntro()
+      
+        }
+        else
+        {
+                
+            var success:Bool = false
+            (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: userID as! String)
+     
+            loadSettings()
+     
+        }
+       // getApplication()
 
-    
-        loadIntro()
-
-         getApplication()
     }
  
     let query = NSMetadataQuery()
@@ -2033,13 +1871,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
       @objc func didRecieveWorkMainNotification(_ notification: Notification) {
          // print("Test Notification")
     
-        for i in 0...query.resultCount
-        {
-          //  let dict = query.results[i] as? [String:Any]
-            //print (dict)
-          //  let name  = dict.va
-        }
-          //processUrl()
+       
       }
     
    
@@ -2058,9 +1890,6 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     }
     func loadIntro()
     {
-        
-
-        
         
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
           
