@@ -2,7 +2,7 @@
 //  UserList+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/10.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 
@@ -16,8 +16,8 @@ extension UserList {
         return NSFetchRequest<UserList>(entityName: "UserList")
     }
 
-    @NSManaged public var id: Int64
     @NSManaged public var answer: String?
+    @NSManaged public var id: Int64
     @NSManaged public var type: String?
 
 }

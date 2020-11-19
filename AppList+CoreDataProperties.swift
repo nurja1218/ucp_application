@@ -2,7 +2,7 @@
 //  AppList+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/11.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 
@@ -16,10 +16,10 @@ extension AppList {
         return NSFetchRequest<AppList>(entityName: "AppList")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var type: String?
-    @NSManaged public var group: String?
-    @NSManaged public var process: String?
     @NSManaged public var etc: String?
+    @NSManaged public var group: String?
+    @NSManaged public var name: String?
+    @NSManaged public var process: String?
+    @NSManaged public var type: String?
 
 }

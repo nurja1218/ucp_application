@@ -2,7 +2,7 @@
 //  Gestures+CoreDataClass.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/13.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 

@@ -93,6 +93,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         webView.layer?.backgroundColor = color
         
    
+        connectDB()
        
    //     getServerUserList()
    //     getServerAppList()
@@ -124,6 +125,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.saveUserList(type: type!, id: id!,  answer:answer!,  onSuccess: { (success) in
                 
                 print("success")
+                
             })
             
             
@@ -286,7 +288,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
     
      //   connectDB()
-        let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t3")
+        let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t3",id:self.user.userid!)
          
       
         var option = String()
@@ -365,7 +367,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
     
         //connectDB()
-         let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t4")
+         let commands = CoreDataManager.shared.getCommand(name: condition, touch: "t4",id:self.user.userid!)
         
   
         var option = String()
@@ -510,6 +512,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
      }
     func initLocalCommandDB()
     {
+        /*
         var bInit =  UserDefaults.standard.bool(forKey: "INIT_DB")
         if(bInit == false)
         {
@@ -518,6 +521,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
             
+            if(response == nil)
+            {
+                return
+            }
             
             for _dict in ( response! as! NSArray)
             {
@@ -546,7 +553,51 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             }
         }
-       
+ */
+        var userID =  UserDefaults.standard.string(forKey: "USER_ID")
+        var bInit =  UserDefaults.standard.bool(forKey: "INIT_DB")
+  
+      //  if(userID != (self.user.userid ))
+        if(bInit == false)
+        {
+            let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: nil )
+            
+            let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+            
+            if(response == nil)
+            {
+                return
+            }
+            
+            for _dict in ( response! as! NSArray)
+            {
+                
+             
+                let dict:[String:Any] = _dict as! [String:Any]
+            
+                let name =  dict["app_Name"] as? String
+             
+                let command =  dict["command"] as? String
+              
+                let shortcut =  dict["shortcut"] as? String
+              
+                var touch =  dict["touch"] as? String
+                if(touch == nil)
+                {
+                    touch = ""
+                }
+                
+                CoreDataManager.shared.saveCommand(name: name!,id:self.user.userid!, type: user.type!, group: name!, gesture: "", shortcut: shortcut!, command: command!, enable: false, touch:touch!,onSuccess:{ (success) in
+                    
+                    UserDefaults.standard.setValue(true, forKey: "INIT_DB")
+                    UserDefaults.standard.synchronize()
+                  
+                })
+            
+            }
+        }
+        
+
     }
     
     override func viewWillAppear() {
@@ -588,7 +639,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 UserDefaults.standard.setValue(false, forKey: "INIT_DB")
                 UserDefaults.standard.synchronize()
                 
-                self.initLocalCommandDB()
+                CoreDataManager.shared.deleteCommands()
+                
+                UserDefaults.standard.set("",forKey: "USER_ID")
+                UserDefaults.standard.synchronize()
+           
+             //   self.initLocalCommandDB()
              }
          })
     }
@@ -652,6 +708,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                                         var success:Bool = false
                                                                         (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: email as! String)
                                                                     
+                                                                        CoreDataManager.shared.updateUser(id: email as! String)
+                                                                        
                                                                         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                                                         
                                                                         self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
@@ -734,11 +792,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                    
                             if(self.user.password == pass as? String )
                             {
-                                       
+                                 
+                                let oldUserId = UserDefaults.standard.string(forKey: "USER_ID")
+                                if(oldUserId != self.user.userid!)
+                                {
+                                    UserDefaults.standard.setValue(false, forKey: "INIT_DB")
+                                }
                             
                                 UserDefaults.standard.set(self.user.userid!,forKey: "USER_ID")
                                 UserDefaults.standard.synchronize()
                              
+                                CoreDataManager.shared.updateUser(id:self.user.userid!)
                                 
                                 let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                 
@@ -1431,12 +1495,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let type =  CoreDataManager.shared.getUserType(query: usageType)
             
       
-            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t3", gesture: selectedGesture)
+            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t3", gesture: selectedGesture,id:self.user.userid!)
             
             for command in commands
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
-                                                     command: command.command!, enable:false,touch:"t3", onSuccess: { (success) in
+                                                     command: command.command!, enable:false,touch:"t3",id:self.user.userid!, onSuccess: { (success) in
                                                                
                         
                 })
@@ -1451,7 +1515,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                    
             
             CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
-                                               command: msg, enable:true,touch:"t3", onSuccess: { (success) in
+                                               command: msg, enable:true,touch:"t3",id:self.user.userid!, onSuccess: { (success) in
                                                 
                                                 
             })
@@ -1468,12 +1532,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let type =  CoreDataManager.shared.getUserType(query: usageType)
                    
    
-            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t4", gesture: selectedGesture)
+            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t4", gesture: selectedGesture,id:self.user.userid!)
             
             for command in commands
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
-                                                     command: command.command!, enable:false,touch:"t4", onSuccess: { (success) in
+                                                     command: command.command!, enable:false,touch:"t4",id:self.user.userid!, onSuccess: { (success) in
                                                                
                         
                 })
@@ -1484,7 +1548,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             selectedOldCode = selectedCode
             CoreDataManager.shared.updateCommand(name: selectedApplication, type: type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
-                                               command: msg, enable:true, touch:"t4",onSuccess: { (success) in
+                                               command: msg, enable:true, touch:"t4",id:self.user.userid!,onSuccess: { (success) in
                        
                 
             })

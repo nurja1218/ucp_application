@@ -2,7 +2,7 @@
 //  Command+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/12.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 
@@ -16,14 +16,14 @@ extension Command {
         return NSFetchRequest<Command>(entityName: "Command")
     }
 
+    @NSManaged public var command: String?
     @NSManaged public var enable: Bool
     @NSManaged public var gesture: String?
     @NSManaged public var group: String?
     @NSManaged public var name: String?
     @NSManaged public var shortcut: String?
+    @NSManaged public var touch: String?
     @NSManaged public var type: String?
     @NSManaged public var userid: String?
-    @NSManaged public var command: String?
-    @NSManaged public var touch: String?
 
 }

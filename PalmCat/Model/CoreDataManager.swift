@@ -115,6 +115,7 @@ class CoreDataManager: NSObject {
                     user.type = type
                     user.answer = answer
                     
+                    
                     contextSave { success in
                         onSuccess(success)
                     }
@@ -142,6 +143,56 @@ class CoreDataManager: NSObject {
         
         
     }
+    func updateUser( id: String) {
+        
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "Users")
+                      
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+         
+                if(fetchResult.count > 0)
+                {
+                
+                    var i:Int = 0
+                    for listEntity in fetchResult {
+                    
+                        let user = listEntity as! Users
+                        
+                        print(user as Any)
+                            
+                     //   user.enable = false
+                        if(user.userid == id )
+                        {
+                            fetchResult[i].setValue(true, forKey: "enable")
+                   
+                        }
+                        else
+                        {
+                            fetchResult[i].setValue(false, forKey: "enable")
+                   
+                        }
+                           
+                         i = i + 1
+          
+                        contextSave { success in
+                           // onSuccess(success)
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+    }
+    
     func saveAppList(name:String, type: String, group: String,
                   process: String, etc:String, onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context
@@ -272,15 +323,16 @@ class CoreDataManager: NSObject {
         return []
     }
     func updateCommand(name:String, type: String, group: String,
-                     gesture: String, shortcut:String,command:String,enable:Bool, touch:String,onSuccess: @escaping ((Bool) -> Void)) {
+                       gesture: String, shortcut:String,command:String,enable:Bool, touch:String, id:String,onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context
         {
             let fetchRequest: NSFetchRequest<NSManagedObject>
                                            = NSFetchRequest<NSManagedObject>(entityName: "Command")
                                    
                
-            fetchRequest.predicate = NSPredicate(format: "(name == %@)AND(command == %@)", name, command)
-                                  
+            fetchRequest.predicate = NSPredicate(format: "(name == %@)AND(command == %@)AND(userid == %@)", name, command,id)
+      //      fetchRequest.predicate = NSPredicate(format: "(name == %@)AND(command == %@)", name, command)
+  
             if let fetchResult = try? context.fetch(fetchRequest)  {
             
                let entity: NSEntityDescription
@@ -299,6 +351,7 @@ class CoreDataManager: NSObject {
                                 user.command = command
                                 user.enable = enable
                                 user.touch = touch
+                    user.userid = id
                                                 
                                 contextSave { success in
                                     onSuccess(success)
@@ -319,7 +372,8 @@ class CoreDataManager: NSObject {
                                   
                     fetchResult[0].setValue(enable, forKey: "enable")
                     fetchResult[0].setValue(touch, forKey: "touch")
-                  
+                    fetchResult[0].setValue(id, forKey: "userid")
+                 
                     contextSave { success in
                           onSuccess(success)
                       }
@@ -331,7 +385,7 @@ class CoreDataManager: NSObject {
         
         
     }
-    func saveCommand(name:String, type: String, group: String,
+    func saveCommand(name:String, id:String,type: String, group: String,
                       gesture: String, shortcut:String,command:String,enable:Bool, touch:String,onSuccess: @escaping ((Bool) -> Void)) {
          if let context = context
          {
@@ -339,15 +393,59 @@ class CoreDataManager: NSObject {
                                             = NSFetchRequest<NSManagedObject>(entityName: "Command")
                                     
                 
-         //    fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+          //   fetchRequest.predicate = NSPredicate(format: "(userid==%@)","jimmy")
                                    
              if let fetchResult = try? context.fetch(fetchRequest)  {
-             
+             /*
+                if(fetchResult.count == 0)
+                {
+                    let entity: NSEntityDescription
+                                         = NSEntityDescription.entity(forEntityName: "Command", in: context)!
+                                         
+                                     let user: Command = (NSManagedObject(entity: entity, insertInto: context) as? Command)!
+                                     
+                                    user.userid = "jimmy"
+                                     user.name = name
+                                     user.type = type
+                                     user.group = group
+                                     user.gesture = gesture
+                                     user.shortcut = shortcut
+                                     user.command = command
+                                     user.enable = enable
+                                     user.touch = touch
+                //
+                                                     
+                                     contextSave { success in
+                                         onSuccess(success)
+                                     }
+                }
+                else
+                {
+                    fetchResult[0].setValue("jimmy", forKey: "userid")
+                    
+                    fetchResult[0].setValue(name, forKey: "name")
+                    
+                    fetchResult[0].setValue(group, forKey: "group")
+                    
+                   // fetchResult[0].setValue(gesture, forKey: "gesture")
+                    fetchResult[0].setValue(shortcut, forKey: "shortcut")
+                    fetchResult[0].setValue(command, forKey: "command")
+                    fetchResult[0].setValue(touch, forKey: "touch")
+                    
+                    contextSave { success in
+                                       
+                        onSuccess(success)
+                                           
+                                       
+                    }
+                }
+ */
                 let entity: NSEntityDescription
                                      = NSEntityDescription.entity(forEntityName: "Command", in: context)!
                                      
                                  let user: Command = (NSManagedObject(entity: entity, insertInto: context) as? Command)!
                                  
+                                user.userid = id
                                  user.name = name
                                  user.type = type
                                  user.group = group
@@ -356,16 +454,20 @@ class CoreDataManager: NSObject {
                                  user.command = command
                                  user.enable = enable
                                  user.touch = touch
+            //
                                                  
                                  contextSave { success in
                                      onSuccess(success)
                                  }
+                
+                
+ 
              }
          }
          
          
      }
-    func getCommand(name:String, touch:String) -> [Command]   {
+    func getCommand(name:String, touch:String,id:String) -> [Command]   {
         //let query = "Rob"
         
         var model: Command = Command()
@@ -379,9 +481,11 @@ class CoreDataManager: NSObject {
                       
                  
                  // The == syntax may also be used to search for an exact match
-                 fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)", name, touch)
-                  
-                  
+                 fetchRequest.predicate = NSPredicate(format: "(name==%@) AND (touch==%@) AND (userid==%@)", name, touch,id)
+           // fetchRequest.predicate = NSPredicate(format: "(name==%@)AND(touch==%@)", name, touch)
+        
+       //     fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)", name, touch)
+   
             if let fetchResult = try? context.fetch(fetchRequest)  {
                  
  
@@ -395,7 +499,7 @@ class CoreDataManager: NSObject {
         return []
         
     }
-    func getCommandGesture(name:String, touch:String, gesture:String) -> [Command]   {
+    func getCommandGesture(name:String, touch:String, gesture:String, id:String) -> [Command]   {
         //let query = "Rob"
         
         var model: Command = Command()
@@ -409,8 +513,9 @@ class CoreDataManager: NSObject {
                       
                  
                  // The == syntax may also be used to search for an exact match
-                 fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)AND(gesture==%@)", name, touch,gesture)
-                  
+           //     fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)AND(gesture==%@)", name, touch,gesture)
+            fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)AND(gesture==%@)AND(userid==%@)", name, touch,gesture,id)
+         
                   
             if let fetchResult = try? context.fetch(fetchRequest)  {
                  
@@ -470,9 +575,16 @@ class CoreDataManager: NSObject {
 
             do {
                 try context.execute(batchDeleteRequest)
+                contextSave { success in
+                                   
+                    //onSuccess(success)
+                                       
+                                   
+                }
 
             } catch {
                 // Error Handling
+                print("error")
             }
         }
         

@@ -18,6 +18,7 @@ extension Users {
 
     @NSManaged public var answer: String?
     @NSManaged public var country: String?
+    @NSManaged public var enable: Bool
     @NSManaged public var name: String?
     @NSManaged public var password: String?
     @NSManaged public var type: String?
