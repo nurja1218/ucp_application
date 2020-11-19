@@ -2,7 +2,7 @@
 //  Users+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/10.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 
@@ -16,11 +16,11 @@ extension Users {
         return NSFetchRequest<Users>(entityName: "Users")
     }
 
-    @NSManaged public var userid: String?
-    @NSManaged public var password: String?
+    @NSManaged public var answer: String?
     @NSManaged public var country: String?
     @NSManaged public var name: String?
+    @NSManaged public var password: String?
     @NSManaged public var type: String?
-    @NSManaged public var answer: String?
+    @NSManaged public var userid: String?
 
 }

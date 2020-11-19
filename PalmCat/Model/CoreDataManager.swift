@@ -5,8 +5,8 @@ import AppKit
 class CoreDataManager: NSObject {
     static let shared: CoreDataManager = CoreDataManager()
     
-    let appDelegate: AppDelegate? =  NSApplication.shared.delegate as! AppDelegate
-   
+    let appDelegate: AppDelegate? =  NSApp.delegate as! AppDelegate//NSApplication.shared.delegate as! AppDelegate
+ 
     lazy var context = appDelegate?.persistentContainer.viewContext
     
     let modelName: String = "Users"
@@ -30,7 +30,7 @@ class CoreDataManager: NSObject {
         }
         return models
     }
-    func getUser(query:String) -> Users    {
+    func getUser(query:String) -> ( Users , sucess:Bool)   {
         //let query = "Rob"
         var model: Users = Users()
         
@@ -63,10 +63,17 @@ class CoreDataManager: NSObject {
                             
                            
                             model = user
-                            return model
+                            return (user , true)
                           
                         }
                      }
+                     else
+                     {
+                      //  let data  = fetchResult as! Users
+                        
+                        return  (Users() , false)
+                     }
+                
                      
                      
                            // model = fetchResult
@@ -74,8 +81,10 @@ class CoreDataManager: NSObject {
             
         }
      
+       // model.userid = ""
       
-        return model
+        
+        return  (Users() , false)
         
     }
     
@@ -286,7 +295,7 @@ class CoreDataManager: NSObject {
                                 user.type = type
                                 user.group = group
                                 user.gesture = gesture
-                                user.shortcut = shortcut
+                               // user.shortcut = shortcut
                                 user.command = command
                                 user.enable = enable
                                 user.touch = touch
@@ -305,7 +314,7 @@ class CoreDataManager: NSObject {
                                   
                       fetchResult[0].setValue(gesture, forKey: "gesture")
                                 
-                      fetchResult[0].setValue(shortcut, forKey: "shortcut")
+                    //  fetchResult[0].setValue(shortcut, forKey: "shortcut")
                        fetchResult[0].setValue(command, forKey: "command")
                                   
                     fetchResult[0].setValue(enable, forKey: "enable")
@@ -384,6 +393,71 @@ class CoreDataManager: NSObject {
      
       
         return []
+        
+    }
+    func getCommandGesture(name:String, touch:String, gesture:String) -> [Command]   {
+        //let query = "Rob"
+        
+        var model: Command = Command()
+        
+    //    let request: NSFetchRequest<Users> = Users.fetchRequest()
+    
+        if let context = context {
+            
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "Command")
+                      
+                 
+                 // The == syntax may also be used to search for an exact match
+                 fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)AND(gesture==%@)", name, touch,gesture)
+                  
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+ 
+                return fetchResult as! [Command]
+                
+            }
+            
+        }
+     
+      
+        return []
+        
+    }
+    func use(command:String, name:String,  touch:String) -> Bool   {
+        //let query = "Rob"
+        
+        var model: Command = Command()
+        
+    //    let request: NSFetchRequest<Users> = Users.fetchRequest()
+    
+        var ret:Bool = false
+        if let context = context {
+            
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "Command")
+                      
+                 
+                 // The == syntax may also be used to search for an exact match
+                 fetchRequest.predicate = NSPredicate(format: "(name==%@) AND(touch==%@)AND(command==%@)", name, touch,command)
+                  
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+ 
+                for c in fetchResult {
+                    let command = c as! Command
+                    
+                    ret = command.enable
+                    break
+                }
+            }
+            
+        }
+     
+      
+        return ret
         
     }
     func deleteCommands()

@@ -35,7 +35,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     var oldCommand:String = ""
     
-    var user:Users!
+    var user:Users = Users()
     
     var selectedApplication = "MacOS"
     var selectedGestureIndex:Int = 0
@@ -359,10 +359,16 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         option.append("Select one...")
         option.append("</option>")
         
+        //selectedGesture
         
         for command in commands
         {
-            if( command.enable == nil || command.enable == false )
+            if(command.name == condition)
+            {
+                
+            }
+            
+            if( command.enable == nil ||  command.gesture?.count == 0  )
               {
                     option.append("<option>")
                   
@@ -665,48 +671,42 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
      }
     func initLocalCommandDB()
     {
-        
-       
-        CoreDataManager.shared.deleteCommands()
-        let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: nil )
-        
-        let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
-        
-        
-        for _dict in ( response! as! NSArray)
+        var bInit =  UserDefaults.standard.bool(forKey: "INIT_DB")
+        if(bInit == false)
         {
-            /*
-             "app_Id" = 1;
-                "app_Name" = Youtube;
-                command = Mute;
-                gesture = RD;
-                id = 7;
-                shortcut = m;
-                touch = t3;
-             */
-         
-            let dict:[String:Any] = _dict as! [String:Any]
-        
-            let name =  dict["app_Name"] as? String
-         
-            let command =  dict["command"] as? String
-          
-            let shortcut =  dict["shortcut"] as? String
-          
-            var touch =  dict["touch"] as? String
-            if(touch == nil)
+            CoreDataManager.shared.deleteCommands()
+            let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: nil )
+            
+            let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
+            
+            
+            for _dict in ( response! as! NSArray)
             {
-                touch = ""
+                
+             
+                let dict:[String:Any] = _dict as! [String:Any]
+            
+                let name =  dict["app_Name"] as? String
+             
+                let command =  dict["command"] as? String
+              
+                let shortcut =  dict["shortcut"] as? String
+              
+                var touch =  dict["touch"] as? String
+                if(touch == nil)
+                {
+                    touch = ""
+                }
+                
+                CoreDataManager.shared.saveCommand(name: name!, type: user.type!, group: name!, gesture: "", shortcut: shortcut!, command: command!, enable: false, touch:touch!,onSuccess:{ (success) in
+                    
+                    UserDefaults.standard.setValue(true, forKey: "INIT_DB")
+                    UserDefaults.standard.synchronize()
+                  
+                })
+            
             }
-            else
-            {
-                print(touch)
-            }
-            CoreDataManager.shared.saveCommand(name: name!, type: user.type!, group: name!, gesture: "", shortcut: shortcut!, command: command!, enable: false, touch:touch!,onSuccess:{ (success) in
-            })
-        
         }
-           
        
     }
     
@@ -723,8 +723,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         webView.layer?.backgroundColor = NSColor.clear.cgColor;
         
-       
-
+     
     }
    
     func Alert(question: String, text: String)  {
@@ -736,6 +735,24 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         alert.runModal()
       //  alert.addButton(withTitle: "Cancel")
         //return alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn
+    }
+    func ConfirmDelete()  {
+        let alert = NSAlert()
+        alert.messageText = "Delete the document?"
+        alert.informativeText = "Are you sure you would like to delete all settings?"
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        alert.alertStyle = NSAlert.Style.warning
+
+        alert.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+            if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
+                 print("Document deleted")
+                UserDefaults.standard.setValue(false, forKey: "INIT_DB")
+                UserDefaults.standard.synchronize()
+                
+                self.initLocalCommandDB()
+             }
+         })
     }
     func processSignUp()
     {
@@ -794,8 +811,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                                 if( (country as? String)!.count > 0)
                                                                 {
                                                                     CoreDataManager.shared.saveUser(name: name as! String, id: email as! String, password: pass0 as! String, country: (country as? String)!,answer: "", type:"", onSuccess:{ (success) in
-                                                                          
-                                                                        self.user = CoreDataManager.shared.getUser(query: email as! String)
+                                                                        var success:Bool = false
+                                                                        (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: email as! String)
                                                                     
                                                                         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                                                         
@@ -861,9 +878,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
             if let id = result {
             
-                
-                self.user = CoreDataManager.shared.getUser(query: id as! String)
-                
+                var sucess:Bool = false
+                ( self.user, sucess:sucess ) = CoreDataManager.shared.getUser(query: id as! String)
+                if(sucess == false )
+                {
+                    self.Alert(question: "회원가입이 되어있지 않습니다.", text: "")
+        
+                }
                       
                 if((id as! String).count > 0  && self.user.userid!.count > 0 && self.user.userid == (id as! String))
                 {
@@ -1017,6 +1038,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                   
                 processLogin()
+                NSWorkspace.shared.launchApplication("Pero")
+          
     
             }
              
@@ -1150,6 +1173,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.17", ofType: "html", inDirectory:"www/ucp-v03-t")!)
                 
                 self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+                
+                       
+            }
+            if(navigationAction.request.url?.absoluteString.contains("delete.html") == true)
+            {
+                   
+               
+                decisionHandler(.allow)
+
+                
+                self.ConfirmDelete()
                 
                        
             }
@@ -1548,6 +1582,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             //let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t3")
           //  command.command = msg
+            /*
             if( selectedCode == selectedOldCode)
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
@@ -1556,7 +1591,21 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                         
                 })
             }
+ */
+         //   let commands = CoreDataManager.shared.getCommand(name: selectedApplication, touch: "t3")
+        
+            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t3", gesture: selectedGesture)
             
+            for command in commands
+            {
+                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
+                                                     command: command.command!, enable:false,touch:"t3", onSuccess: { (success) in
+                                                               
+                        
+                })
+            }
+            
+            let use =  CoreDataManager.shared.use(command: msg, name: selectedApplication, touch: "t3")
                
             self.oldCommand = msg
             selectedOldGesture = selectedGesture
@@ -1584,7 +1633,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
           //  let command = CoreDataManager.shared.getCommand(name: selectedApplication, touch:"t4")
          
            // command.command = msg
-         
+         /*
             if( selectedCode == selectedOldCode)
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: selectedGesture, shortcut: "",
@@ -1593,7 +1642,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                         
                 })
             }
+           */
+            let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t4", gesture: selectedGesture)
             
+            for command in commands
+            {
+                CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
+                                                     command: command.command!, enable:false,touch:"t4", onSuccess: { (success) in
+                                                               
+                        
+                })
+            }
             self.oldCommand = msg
            
             selectedOldGesture = selectedGesture
@@ -1953,8 +2012,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
         loadIntro()
 
-        NSWorkspace.shared.launchApplication("Pero")
-        getApplication()
+         getApplication()
     }
  
     let query = NSMetadataQuery()

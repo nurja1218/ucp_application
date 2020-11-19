@@ -2,7 +2,7 @@
 //  Gestures+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/13.
+//  Created by Junsung Park on 2020/11/19.
 //
 //
 
@@ -16,11 +16,11 @@ extension Gestures {
         return NSFetchRequest<Gestures>(entityName: "Gestures")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var app_name: String?
+    @NSManaged public var code: String?
     @NSManaged public var command: String?
+    @NSManaged public var name: String?
     @NSManaged public var shortcut: String?
     @NSManaged public var touch: String?
-    @NSManaged public var code: String?
 
 }
