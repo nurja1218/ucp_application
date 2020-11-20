@@ -633,16 +633,20 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         alert.addButton(withTitle: "Cancel")
         alert.alertStyle = NSAlert.Style.warning
 
-        alert.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+        alert.beginSheetModal(for: self.view.window!, completionHandler: { [self] (modalResponse) -> Void in
             if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
                  print("Document deleted")
                 UserDefaults.standard.setValue(false, forKey: "INIT_DB")
                 UserDefaults.standard.synchronize()
                 
             
-                CoreDataManager.shared.deleteCommands()
-          //     CoreDataManager.shared.deleteCommandsID(id: self.user.userid!)
-                
+                CoreDataManager.shared.deleteCommandsID(id: self.user.userid!)
+                 //CoreDataManager.shared.deleteCommands()
+                initLocalCommandDB()
+                self.getUserType(condition: self.selectedApplication)
+                self.getUserType2(condition: self.selectedApplication)
+       
+          //
                 
                 UserDefaults.standard.set("",forKey: "USER_ID")
                 UserDefaults.standard.synchronize()
@@ -1902,6 +1906,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         view.superview?.addConstraints(viewConstraints())
     
         let userID = UserDefaults.standard.string(forKey: "USER_ID")
+        
+       
+        let init0 =   UserDefaults.standard.bool(forKey: "PALMCAT_INIT")
+        if(init0 == false)
+        {
+            UserDefaults.standard.setValue(true, forKey: "PALMCAT_INIT")
+            UserDefaults.standard.synchronize()
+            CoreDataManager.shared.deleteCommands()
+  
+     
+        }
+        
         if(userID == nil || userID!.count == 0)
         {
             loadIntro()
