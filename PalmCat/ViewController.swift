@@ -957,7 +957,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                   
                 processLogin()
-                NSWorkspace.shared.launchApplication("Pero")
+               // NSWorkspace.shared.launchApplication("Pero")
+                let mainAppIdentifier = "com.junsoft.Pero"
+            
+                let runningApps = NSWorkspace.shared.runningApplications
+                let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
+
+                if(!isRunning)
+                {
+                    NSWorkspace.shared.launchApplication("Pero")
+
+                }
+                
           
     
             }
@@ -2063,8 +2074,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
             var success:Bool = false
             
-            NSWorkspace.shared.launchApplication("Pero")
+            let mainAppIdentifier = "com.junsoft.Pero"
+            
+            let runningApps = NSWorkspace.shared.runningApplications
+            let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
 
+            if(!isRunning)
+            {
+                NSWorkspace.shared.launchApplication("Pero")
+
+            }
+         
             (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: userID as! String)
      
             loadSettings()
