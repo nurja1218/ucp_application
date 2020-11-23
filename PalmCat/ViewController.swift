@@ -581,13 +581,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
              
                 let command =  dict["command"] as? String
               
-                let shortcut =  dict["shortcut"] as? String
+                var shortcut =  dict["shortcut"] as? String
               
                 var touch =  dict["touch"] as? String
                 if(touch == nil)
                 {
                     touch = ""
                 }
+                if(shortcut == nil)
+                {
+                    shortcut = ""
+                }
+                print(dict)
                 
                 CoreDataManager.shared.saveCommand(name: name!,id:self.user.userid!, type: user.type!, group: name!, gesture: "", shortcut: shortcut!, command: command!, enable: false, touch:touch!,onSuccess:{ (success) in
                     
@@ -2003,7 +2008,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
         print(touch)
     
-        if(touch <= 6)
+        if(touch <= 4)
         {
             // good
             nextFinger()
