@@ -15,6 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     
     var window: NSWindow!
+    var controller:ViewController!
     
     lazy var persistentContainer: NSPersistentContainer = {
          let container = NSPersistentContainer(name: "Users") // 여기는 파일명을 적어줘요.
@@ -43,6 +44,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
+    }
+    func application(_ application: NSApplication, open urls: [URL])
+    {
+        print("openurl:")
+        let desc = urls[0].absoluteString
+        let ret = desc.replacingOccurrences(of: "palmcat://", with: "")
+        
+        if(controller != nil)
+        {
+            controller.processTouchpanel(touch: Int(ret)!)
+        }
+ 
+       // print(Int(ret))
     }
 }
 

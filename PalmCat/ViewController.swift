@@ -50,6 +50,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     var hidManager:IOHIDManager!
 
     var gamepad:GCMicroGamepad!
+    
+    var handIndex:Int = 0
     override func awakeFromNib() {
     
         if self.view.layer != nil {
@@ -1270,6 +1272,41 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
             
         }
+        else if(title == "f1")
+        {
+            appDelegate?.controller = self
+            handIndex = 1
+        }
+        else if(title == "f2")
+        {
+            handIndex = 2
+  
+        }
+        else if(title == "f3")
+        {
+            handIndex = 3
+  
+        }
+        else if(title == "f4")
+        {
+            handIndex = 4
+  
+        }
+        else if(title == "f5")
+        {
+            handIndex = 5
+  
+        }
+        else if(title == "f6")
+        {
+            handIndex = 6
+  
+        }
+        else if(title == "f7")
+        {
+            handIndex = 7
+  
+        }
         else if(title ==  "m2-app1")
         {
        
@@ -1901,8 +1938,101 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
     }
  
+    func nextFinger()
+    {
+        if(handIndex == 1)
+        {
+         
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.10", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+         
+
+        }
+        if(handIndex == 2)
+        {
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.11", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+        }
+        if(handIndex == 3)
+        {
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.12", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+         
+        }
+        if(handIndex == 4)
+        {
+         
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.13", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+        }
+        if(handIndex == 5)
+        {
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.14", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+         
+        }
+        if(handIndex == 6)
+        {
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.15", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+        }
+        if(handIndex == 7)
+        {
+         
+            appDelegate?.controller = nil
+   
+            let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "c2", ofType: "html", inDirectory:"www/ucp-v03-f")!)
+              
+            webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+
+        }
+ }
+    
+   func  processTouchpanel(touch:Int)
+    {
+        print(touch)
+    
+        if(touch <= 6)
+        {
+            // good
+            nextFinger()
+        }
+        else
+        {
+            //bad
+            //id="invalid"
+            let script =
+                        "document.getElementById('invalid').click()"
+            webView.evaluateJavaScript(script) { (result, error) in
+                          
+                              
+                          
+            }
+            
+        }
+    
+    
+
+   }
+    let appDelegate: AppDelegate? =  NSApp.delegate as! AppDelegate//NSApplication.shared.delegate as! AppDelegate
+
     override func viewDidAppear() {
         super.viewDidAppear()
+        
+     
+        appDelegate?.controller = self
+        
         view.superview?.addConstraints(viewConstraints())
     
         let userID = UserDefaults.standard.string(forKey: "USER_ID")
@@ -1927,6 +2057,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
                 
             var success:Bool = false
+            
+            NSWorkspace.shared.launchApplication("Pero")
+
             (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: userID as! String)
      
             loadSettings()
