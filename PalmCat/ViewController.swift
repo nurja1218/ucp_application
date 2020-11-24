@@ -652,6 +652,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 initLocalCommandDB()
                 self.getUserType(condition: self.selectedApplication)
                 self.getUserType2(condition: self.selectedApplication)
+                
+                
        
           //
                 
@@ -1584,6 +1586,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             getUserType2(condition: selectedApplication)
             
+            UserDefaults.standard.set(self.user.userid,forKey: "USER_ID")
+            UserDefaults.standard.synchronize()
+      
+            
         }
         else if(msg2.contains("t4") == true) // touch 4
         {
@@ -1612,6 +1618,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                        
                 
             })
+            
+            UserDefaults.standard.set(self.user.userid,forKey: "USER_ID")
+            UserDefaults.standard.synchronize()
+      
         }
         
         else if(msg2 == "OPT")
