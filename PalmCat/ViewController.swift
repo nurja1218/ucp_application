@@ -323,12 +323,16 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             return
             
         }
-        option.append("<option>")
+        
+        option.append("<option disabled selected>")
+        
+        
         option.append("Select one...")
         option.append("</option>")
+ 
         
         //selectedGesture
-        
+        var isEnable :Bool = false
         for command in commands
         {
             
@@ -339,14 +343,40 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               }
               else
               {
+                if(command.gesture == selectedGesture)
+                {
+                    isEnable = true
+                    option.append("<option disabled selected>")
+           
+                }
+                else
+                {
                     option.append("<option disabled>")
+       
+                }
                   
               }
             option.append(command.command!)
               option.append("</option>")
             
         }
-   
+     //   let index0 = option.index(option.startIndex, offsetBy:0)
+     //   option.remove(at: index0)
+     //   let index1 = option.index(option.startIndex, offsetBy:1)
+     //   option.remove(at: index1)
+        
+      //  option[index1] = "Not Selected..."
+     
+     //   let index2 = option.index(option.startIndex, offsetBy:2)
+     //   option.remove(at: index1)
+
+        if(isEnable == true)
+        {
+            option =  option.replacingOccurrences(of: "<option disabled selected>Select one...</option>", with: "<option>Not Selected...</option>")
+     
+        }
+        //    option.insert("", at: 0)
+    
         var gestureSrcript = getGestureNodeStr(index: selectedGestureIndex)
            
         gestureSrcript =  gestureSrcript + ""
@@ -402,10 +432,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             return
         }
 
-        option.append("<option>")
+        option.append("<option disabled selected>")
+        
+        
         option.append("Select one...")
         option.append("</option>")
+ 
         
+        //selectedGesture
+        var isEnable :Bool = false
         
         for command in commands
         {
@@ -416,12 +451,28 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               }
               else
               {
-                    option.append("<option disabled>")
+                    if(command.gesture == selectedGesture)
+                    {
+                        isEnable = true
+                        option.append("<option disabled selected>")
+               
+                    }
+                    else
+                    {
+                        option.append("<option disabled>")
+           
+                    }
                   
               }
             option.append(command.command!)
               option.append("</option>")
             
+        }
+        
+        if(isEnable == true)
+        {
+            option =  option.replacingOccurrences(of: "<option disabled selected>Select one...</option>", with: "<option>Not Selected...</option>")
+     
         }
         var gestureSrcript = getGestureNodeStr(index: selectedGestureIndex)
         
@@ -686,6 +737,14 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 self.webView.evaluateJavaScript(idS) { (result, error) in
                 
                     if let email = result {
+                        
+                        let ret =  CoreDataManager.shared.istUser(query: email as! String)
+                        if(ret == true)
+                        {
+                            self.Alert(question: "가입되어 있는 메일입니다.\n다른 메일을 사용하세요.", text: "")
+                 
+                            return
+                        }
                     
                       self.webView.evaluateJavaScript(passS0) { (result, error) in
                       
@@ -978,8 +1037,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                   
                 
-                loadIntro()
-          
+               // loadIntro()
+                loadSettings()
     
             }
              
@@ -1553,12 +1612,29 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
            
             print("message: \(msg)")
-           
             let type =  CoreDataManager.shared.getUserType(query: usageType)
             
       
             let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t3", gesture: selectedGesture,id:self.user.userid!)
-            
+      
+            if(msg == "Not Selected...")
+            {
+                for command in commands
+                {
+                    CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
+                                                         command: command.command!, enable:false,touch:"t3",id:self.user.userid!, onSuccess: { (success) in
+                                                                   
+                            
+                    })
+                }
+                getUserType(condition: selectedApplication)
+                
+           //     getUserType2(condition: selectedApplication)
+         
+                return
+            }
+           
+           
             for command in commands
             {
                 CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
@@ -1584,7 +1660,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
               
             getUserType(condition: selectedApplication)
             
-            getUserType2(condition: selectedApplication)
+           // getUserType2(condition: selectedApplication)
             
             UserDefaults.standard.set(self.user.userid,forKey: "USER_ID")
             UserDefaults.standard.synchronize()
@@ -1599,6 +1675,23 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                    
    
             let commands =  CoreDataManager.shared.getCommandGesture(name: selectedApplication, touch: "t4", gesture: selectedGesture,id:self.user.userid!)
+            
+            
+            if(msg == "Not Selected...")
+            {
+                for command in commands
+                {
+                    CoreDataManager.shared.updateCommand(name: selectedApplication, type:type, group: selectedApplication, gesture: "", shortcut: "",
+                                                         command: command.command!, enable:false,touch:"t4",id:self.user.userid!, onSuccess: { (success) in
+                                                                   
+                            
+                    })
+                }
+                getUserType2(condition: selectedApplication)
+         
+                return
+            }
+            
             
             for command in commands
             {
@@ -1618,7 +1711,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                        
                 
             })
-            
+       //     getUserType(condition: selectedApplication)
+           getUserType2(condition: selectedApplication)
+    
             UserDefaults.standard.set(self.user.userid,forKey: "USER_ID")
             UserDefaults.standard.synchronize()
       
@@ -1840,7 +1935,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     /*
              
       */
-    
+  
     func loadSettings()
     {
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16_default", ofType: "html", inDirectory:"www/cup-v03-m")!)
@@ -1937,12 +2032,15 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
      //   config.userContentController.add(self, name: "iosListener1")
                       
         
-        webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 700), configuration: config)
+        webView = MyWKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 700), configuration: config)
              
         
         let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
        
         webView.wantsLayer = true
+        
+        
+      //  webView.scrollView.isScrollEnabled = false
         
       //  webView.isOpaque = false
         webView.setValue(false, forKey: "drawsBackground")
@@ -2148,6 +2246,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
      
 
     }
+    
     func startUsageType()
     {
        
@@ -2279,20 +2378,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         )
         return [left, right, top, bottom]
     }
-    /*
-    @objc func pushToNextViewController() {
-        if let destinationViewController = destinationViewController {
-            navigationController?.push(viewController: destinationViewController, animated: true)
-        }
+    override func scrollWheel(with event: NSEvent) {
+             print("NoScroll")     // Just to see scroll did not occur
+       
     }
-
-    @objc func popViewController() {
-        navigationController?.popViewController(animated: true)
-    }
- */
 }
 
 
+class MyWKWebView: WKWebView {
+    override func scrollWheel(with event: NSEvent) {
+       //  print("NoScroll")     // Just to see scroll did not occur
+    }
+}
 
 extension URLRequest {
     var isHttpLink: Bool {

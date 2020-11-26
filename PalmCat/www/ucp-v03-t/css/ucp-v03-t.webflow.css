@@ -4661,6 +4661,207 @@ a {
   background-image: linear-gradient(90deg, #f7941d, #d51a56);
 }
 
+.dropdown-2 {
+  position: fixed;
+  left: 1108px;
+  top: 65px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 80px;
+  height: 70px;
+  padding-top: 0px;
+  padding-left: 0px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  text-align: right;
+}
+
+.dropdown-2:hover {
+  -webkit-filter: none;
+  filter: none;
+}
+
+.dropdown-toggle {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding: 0px;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  white-space: normal;
+}
+
+.dropdown-toggle.w--open {
+  display: block;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+}
+
+.image-14 {
+  display: inline-block;
+  width: auto;
+  height: 24px;
+  margin-right: 0px;
+  margin-left: 0px;
+  opacity: 1;
+}
+
+.image-14:hover {
+  display: inline-block;
+  width: auto;
+  height: 28px;
+  margin-right: 0px;
+  margin-left: 0px;
+  -webkit-filter: none;
+  filter: none;
+}
+
+.dropdown-list {
+  left: -8px;
+}
+
+.dropdown-list.w--open {
+  left: -78px;
+  top: 54%;
+  right: 0%;
+  bottom: auto;
+  display: block;
+  width: 180px;
+  margin-bottom: 0px;
+  padding: 0px 18px 10px 7px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  border-radius: 12px;
+  background-color: transparent;
+  font-family: Montserrat, sans-serif;
+  color: #f3eeee;
+  font-weight: 700;
+  background-clip: border-box;
+}
+
+.dropdown-link {
+  display: block;
+  margin-right: 10px;
+  margin-left: 20px;
+  padding: 16px 0px 10px;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-bottom: 0.3px solid #999;
+  font-family: Montserrat, sans-serif;
+  color: #727272;
+  font-weight: 600;
+  text-align: right;
+}
+
+.dropdown-list-2 {
+  left: -8px;
+}
+
+.dropdown-list-2.w--open {
+  left: -98px;
+  top: 40%;
+  right: 0%;
+  bottom: auto;
+  display: block;
+  width: 200px;
+  margin-bottom: 0px;
+  padding: 0px 18px 10px 7px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.2);
+  font-family: Montserrat, sans-serif;
+  color: #f3eeee;
+  font-weight: 700;
+}
+
+.dropdown-link-2 {
+  display: block;
+  margin-right: 10px;
+  margin-left: 20px;
+  padding: 16px 0px 10px;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-bottom: 0.3px solid #666;
+  font-family: Montserrat, sans-serif;
+  color: #333;
+  font-weight: 700;
+  text-align: right;
+}
+
 @media screen and (max-width: 991px) {
   .nav-link {
     color: #fff;
