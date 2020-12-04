@@ -659,7 +659,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     }
     
     override func viewWillAppear() {
-        self.view.window?.center()
+    //    self.view.window?.center()
         let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 
         self.view.layer?.backgroundColor = color
@@ -1950,6 +1950,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
         let source =
    
+            "document.body.style.overflow = 'hidden';" +
             "var g1 = " + getGestureNodeStr(index: 0) + ";"
         +   "g1.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L1' + 'g00');"
@@ -2386,9 +2387,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
 
 class MyWKWebView: WKWebView {
+    /*
     override func scrollWheel(with event: NSEvent) {
        //  print("NoScroll")     // Just to see scroll did not occur
     }
+ */
 }
 
 extension URLRequest {
