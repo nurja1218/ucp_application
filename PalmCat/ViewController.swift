@@ -1256,6 +1256,35 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         let str =  getSelectEventListener()
         
+        var mouseover =
+         "var arrow_element = document.getElementsByClassName('tab-link-g-img');" +
+
+         "for (var i = 0; i < 16; i++) {" +
+         "    arrow_element[i].addEventListener('mouseover', mover);" +
+         "   arrow_element[i].addEventListener('mouseout', mout);" +
+         "    arrow_element[i].addEventListener('click', mcli);" +
+         "    function mover() {" +
+         "        var img_src = this.src;" +
+         "        this.src = img_src.replace('1.', '2.');" +
+         "    }" +
+         "    function mout() {" +
+         "        var img_src = this.src;" +
+         "        if (this.parentNode.className != 'tab-link-g w-inline-block w-tab-link w--current') { " +
+         "            this.src = img_src.replace('2.', '1.');" +
+         "        }" +
+         "    }" +
+         "    function mcli() { " +
+         "        for (var x = 0; x < 16; x++) {" +
+         "            var clear = arrow_element[x].src;" +
+         "            arrow_element[x].src = clear.replace('2.', '1.');" +
+         "        }" +
+         "        console.log(arrow_element[i + 16]);" +
+         "        var img_src = this.src;" +
+         "        this.src = img_src.replace('1.', '2.');" +
+         "    }" +
+         "}" +
+         "arrow_element[0].click();" 
+        
         getGestureNodeStr(index: 0)
     
         let source =
@@ -1329,8 +1358,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         +   "g16.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L16' + 'g15');"
         +   "});"
-        + str
+        + str + ";"  + mouseover
+        
      
+   
+ 
         
         webView.evaluateJavaScript(source) { (result, error) in
         
@@ -1353,36 +1385,43 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             appDelegate?.controller = self
             handIndex = 1
+            appDelegate?.handIndex = handIndex
         }
         else if(title == "f2")
         {
             handIndex = 2
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title == "f3")
         {
             handIndex = 3
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title == "f4")
         {
             handIndex = 4
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title == "f5")
         {
             handIndex = 5
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title == "f6")
         {
             handIndex = 6
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title == "f7")
         {
             handIndex = 7
-  
+            appDelegate?.handIndex = handIndex
+   
         }
         else if(title ==  "m2-app1")
         {
@@ -2127,7 +2166,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
    func  processTouchpanel(touch:Int)
     {
         print(touch)
-    
+    /*
         if(touch <= 4)
         {
             // good
@@ -2147,7 +2186,25 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
         }
     
-    
+    */
+        if(touch > 0)
+        {
+            // good
+            nextFinger()
+        }
+        else
+        {
+            //bad
+            //id="invalid"
+            let script =
+                        "document.getElementById('invalid').click()"
+            webView.evaluateJavaScript(script) { (result, error) in
+                          
+                              
+                          
+            }
+            
+        }
 
    }
     let appDelegate: AppDelegate? =  NSApp.delegate as! AppDelegate//NSApplication.shared.delegate as! AppDelegate
@@ -2228,7 +2285,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     func connectDB()
     {
        
-        let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "106.10.42.103", dbName: "jcp_db", port: 3306, socket: nil)
+        let user = OHMySQLUser(userName: "dev01", password: "palmcatDEV0!", serverName: "106.10.42.103", dbName: "jcp_macos_db", port: 3306, socket: nil)
         let coordinator = OHMySQLStoreCoordinator(user: user!)
         coordinator.encoding = .UTF8MB4
         coordinator.connect()

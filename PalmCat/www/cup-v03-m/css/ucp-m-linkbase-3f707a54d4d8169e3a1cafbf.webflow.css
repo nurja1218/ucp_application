@@ -4801,12 +4801,13 @@ a {
 }
 
 .tab-link-g.w--current {
-  margin-right: auto;
-  margin-left: auto;
-  padding: 0px;
-  border-radius: 15px;
-  background-color: #fca104;
-  opacity: 1;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0px;
+    border-radius: 15px;
+    background-color: #dad7d3;
+    opacity: 1;
+
 }
 
 .tab-link-g6 {
@@ -4891,13 +4892,14 @@ a {
 }
 
 .div-block-17 {
-  position: absolute;
-  top: 0px;
-  margin-top: 20px;
-  margin-left: 20px;
-  padding: 10px;
-  border-radius: 20px;
-  background-color: #fca104;
+    position: absolute;
+    top: 0px;
+    margin-top: 20px;
+    margin-left: 20px;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #dad7d3;
+
 }
 
 .tab-pane-tab-12 {
