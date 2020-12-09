@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E037E0A25805C1C004D5038 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 1E037E0925805C1C004D5038 /* www */; };
 		1E57A0D3254949EB0036BB95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A0D2254949EB0036BB95 /* AppDelegate.swift */; };
 		1E57A0D5254949EB0036BB95 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A0D4254949EB0036BB95 /* ViewController.swift */; };
 		1E57A0D7254949EC0036BB95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E57A0D6254949EC0036BB95 /* Assets.xcassets */; };
@@ -14,7 +15,6 @@
 		1E57A0E8254976700036BB95 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A0E7254976700036BB95 /* BluetoothManager.swift */; };
 		1E57A111254A58680036BB95 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A110254A58680036BB95 /* NavigationBarView.swift */; };
 		1E57A114254A5DC00036BB95 /* PeroButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E57A113254A5DC00036BB95 /* PeroButton.swift */; };
-		1E77F589255D28280014C060 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 1E77F588255D28280014C060 /* www */; };
 		1E77F58B255E0E7C0014C060 /* ModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E77F58A255E0E7C0014C060 /* ModelManager.swift */; };
 		1E880EEF25524F2D000CB584 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E880EEE25524F2D000CB584 /* WebKit.framework */; };
 		1E97AB4425669FEA00638587 /* Users.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1EA692B8255A9FB10089AD6D /* Users.xcdatamodeld */; };
@@ -23,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E037E0925805C1C004D5038 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		1E57A0CF254949EB0036BB95 /* PalmCat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PalmCat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E57A0D2254949EB0036BB95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E57A0D4254949EB0036BB95 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -33,7 +34,6 @@
 		1E57A0E7254976700036BB95 /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
 		1E57A110254A58680036BB95 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		1E57A113254A5DC00036BB95 /* PeroButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeroButton.swift; sourceTree = "<group>"; };
-		1E77F588255D28280014C060 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		1E77F58A255E0E7C0014C060 /* ModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelManager.swift; sourceTree = "<group>"; };
 		1E880EEE25524F2D000CB584 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		1EA692B9255A9FB10089AD6D /* Users.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Users.xcdatamodel; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 		1E57A0D1254949EB0036BB95 /* PalmCat */ = {
 			isa = PBXGroup;
 			children = (
-				1E77F588255D28280014C060 /* www */,
+				1E037E0925805C1C004D5038 /* www */,
 				1EA692D5255AA66E0089AD6D /* Model */,
 				1E57A112254A5D9C0036BB95 /* Custom */,
 				1E57A10F254A58500036BB95 /* View */,
@@ -205,7 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E77F589255D28280014C060 /* www in Resources */,
+				1E037E0A25805C1C004D5038 /* www in Resources */,
 				1E57A0D7254949EC0036BB95 /* Assets.xcassets in Resources */,
 				1E57A0DA254949EC0036BB95 /* Main.storyboard in Resources */,
 			);
