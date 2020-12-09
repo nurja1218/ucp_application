@@ -754,7 +754,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
          
         let passS1 = "document.getElementsByTagName('input')[3].value"
               
-        let checkS1 = "document.getElementsByTagName('input')[4].value"
+        let checkS1 = "document.getElementsByTagName('input')[4].checked"
         //checkbox-2
               
         webView.evaluateJavaScript(nameS) { (result, error) in
@@ -794,7 +794,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                             {
                                                 if( pass0 as? String == pass1 as? String)
                                                 {
-                                                    if((check as! String) == "on")
+                                                    if((check as! Bool) == true)
                                                     {
                                                         // Success
                                                         /*
@@ -1092,12 +1092,23 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                  goSignUp()
                 
+                
             }
             if(navigationAction.request.url?.absoluteString.contains("signup_submit.html") == true)
             {
                 
                 
                 processSignUp()
+                let mainAppIdentifier = "com.junsoft.Pero"
+            
+                let runningApps = NSWorkspace.shared.runningApplications
+                let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
+
+                if(!isRunning)
+                {
+                    NSWorkspace.shared.launchApplication("Pero")
+
+                }
                 
             }
             //signup_submit.html
