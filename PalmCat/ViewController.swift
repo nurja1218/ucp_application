@@ -659,7 +659,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     }
     
     override func viewWillAppear() {
-    //    self.view.window?.center()
+        self.view.window?.center()
         let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 
         self.view.layer?.backgroundColor = color
@@ -683,6 +683,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
       //  alert.addButton(withTitle: "Cancel")
         //return alert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn
     }
+    //ConfirmLogout
     func ConfirmDelete()  {
         let alert = NSAlert()
         alert.messageText = ""
@@ -715,6 +716,31 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
              }
          })
     }
+    //
+    func ConfirmLogout()  {
+        let alert = NSAlert()
+        alert.messageText = ""
+        alert.informativeText = "Are you sure you would like to log out?"
+        alert.addButton(withTitle: "OK")
+        alert.addButton(withTitle: "Cancel")
+        alert.alertStyle = NSAlert.Style.warning
+
+        alert.beginSheetModal(for: self.view.window!, completionHandler: { [self] (modalResponse) -> Void in
+            if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
+            
+                
+                UserDefaults.standard.set("",forKey: "USER_ID")
+                UserDefaults.standard.synchronize()
+                
+                let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.1", ofType: "html", inDirectory:"www/ucp-v03-home")!)
+                
+                self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+   
+           
+             //   self.initLocalCommandDB()
+             }
+         })
+    }
     func processSignUp()
     {
      
@@ -729,6 +755,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         let passS1 = "document.getElementsByTagName('input')[3].value"
               
         let checkS1 = "document.getElementsByTagName('input')[4].value"
+        //checkbox-2
               
         webView.evaluateJavaScript(nameS) { (result, error) in
         
@@ -795,6 +822,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                                 else
                                                                 {
                                                                     // fail
+                                                                    // 귝거채크
+                                                                    self.Alert(question: "국가를 선택하셔야 가입이 됩니다.", text: "")
+                                                        
                                                                 }
                                                                 
                                                             }
@@ -806,14 +836,29 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                     else
                                                     {
                                                         //fail
+                                                        // 정보 동의 체크
+                                                        self.Alert(question: "정보 관련 사항을 동의하셔야 가입이 됩니다.", text: "")
+                                            
                                                     }
                                                
                                                 }
                                                 else
                                                 {
-                                                    // fail
+                                                    // 비밀번호를 체크
+                                                    self.Alert(question: "비밀번호가 일치하지 않습니다.", text: "")
+                                        
+                                        
+                                          
+                                                    
                                                 }
                                             }
+                                            else
+                                            {
+                                                //
+                                                self.Alert(question: "정보를 모두 정확하게 입력하세요.", text: "")
+                                    
+                                            }
+                                            
                                            
                                             
                                         }
@@ -1184,6 +1229,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
                 
                 self.ConfirmDelete()
+                
+                       
+            }
+            if(navigationAction.request.url?.absoluteString.contains("logout.html") == true)
+            {
+                   
+               
+                decisionHandler(.allow)
+
+                
+                self.ConfirmLogout()
                 
                        
             }
