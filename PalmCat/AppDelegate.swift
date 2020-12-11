@@ -41,76 +41,107 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+        let userId = UserDefaults.standard.string(forKey: "USER_ID")
+        if(userId!.count > 0)
+        {
+          //  CoreDataManager.shared.updateUser(id: userId!, touch: false)
+
+        }
+        
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
+    
     func application(_ application: NSApplication, open urls: [URL])
     {
         print("openurl:")
         let desc = urls[0].absoluteString
-        let ret = desc.replacingOccurrences(of: "palmcat://", with: "") as String
-   
+    
+        var ret = desc.replacingOccurrences(of: "palmcat://", with: "") as String
+        
+        
+   /*
         let Index = ret[0..<3]
         let Middle = ret[2..<6]
         let End0 = ret[4..<9]
-
-        var cnt:Int = 0
-        /*
-        let alert0 = NSAlert()
-        alert0.messageText = ret
-        alert0.informativeText = "Total"
-        alert0.alertStyle = NSAlert.Style.warning
-        alert0.addButton(withTitle: "OK")
-        alert0.runModal()
-            */
+         
+*/
+        let mode  = ret[ret.count-1..<ret.count]
+     
+        ret  = ret[0..<ret.count - 1]
  
+       
+        
+        var cnt:Int = 0
+        
+        
+     
+        
+
+      
+        
+
+    
+
         if(handIndex % 4 == 1)
         {
-            // Index
-            for str in Index
+            if((ret == "8") || (ret == "9") || (ret == "10"))
             {
-                if(str == "1")
-                {
-                    cnt =  cnt + 1
-                }
+                cnt = 1
+                
+           
             }
-         
+           
         }
         else if(handIndex % 4 == 2)
         {
             // Middle
-            for str in Middle
-            {
-                if(str == "1")
-                {
-                    cnt =  cnt + 1
-                }
-            }
           
+            if((ret == "10") || (ret == "11") || (ret == "12") || (ret == "13"))
+            {
+                cnt = 1
+            }
+            
             
         }
         else if(handIndex % 4 == 3)
         {
             // End
-            for str in End0
+           
+            if((ret == "13") || (ret == "14") || (ret == "15") || (ret == "16"))
             {
-                if(str == "1")
-                {
-                    cnt =  cnt + 1
-                }
+                cnt = 1
             }
-            
-                  
+           
            
         }
      
-     //   cnt = 0
-        if(controller != nil)
+        if(handIndex % 4 >= 1)
         {
-            controller.processTouchpanel(touch: cnt)
+            if(controller != nil)
+            {
+              
+                if(mode == "-")
+                {
+                    controller.processTouchpanel(touch: cnt, mode: false)
+     
+                }
+                else if(mode == "+")
+                {
+                 
+                    controller.processTouchpanel(touch: cnt, mode: true)
+     
+                }
+
+            }
         }
+
+        
+       
+     //   cnt = 0
+      
  
        // print(Int(ret))
     }

@@ -226,11 +226,14 @@ class CoreDataManager: NSObject {
                         if(user.userid == id )
                         {
                             fetchResult[i].setValue(true, forKey: "enable")
-                   
+                            fetchResult[i].setValue(false, forKey: "touch")
+                
                         }
                         else
                         {
                             fetchResult[i].setValue(false, forKey: "enable")
+                            fetchResult[i].setValue(false, forKey: "touch")
+                
                    
                         }
                            
@@ -251,6 +254,57 @@ class CoreDataManager: NSObject {
         
     }
     
+    func updateUser( id: String, touch:Bool) {
+        
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                              = NSFetchRequest<NSManagedObject>(entityName: "Users")
+                      
+                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+                 
+         
+                if(fetchResult.count > 0)
+                {
+                
+                    var i:Int = 0
+                    for listEntity in fetchResult {
+                    
+                        let user = listEntity as! Users
+                        
+                        print(user as Any)
+                            
+                     //   user.enable = false
+                        if(user.userid == id )
+                        {
+                        //    fetchResult[i].setValue(true, forKey: "enable")
+                            fetchResult[i].setValue(touch, forKey: "touch")
+                
+                   
+                            contextSave { success in
+                               // onSuccess(success)
+                                
+                            }
+                          
+                            return
+                     
+                        }
+                        
+                           
+                         i = i + 1
+          
+                       
+                    }
+                    
+                }
+                
+            }
+            
+        }
+        
+        
+    }
     func saveAppList(name:String, type: String, group: String,
                   process: String, etc:String, onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context

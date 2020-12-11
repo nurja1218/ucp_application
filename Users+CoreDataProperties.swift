@@ -2,7 +2,7 @@
 //  Users+CoreDataProperties.swift
 //  
 //
-//  Created by Junsung Park on 2020/11/19.
+//  Created by Junsung Park on 2020/12/10.
 //
 //
 
@@ -23,5 +23,6 @@ extension Users {
     @NSManaged public var password: String?
     @NSManaged public var type: String?
     @NSManaged public var userid: String?
+    @NSManaged public var touch: Bool
 
 }

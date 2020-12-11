@@ -37,6 +37,7 @@
         <attribute name="enable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="password" optional="YES" attributeType="String"/>
+        <attribute name="touch" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="userid" optional="YES" attributeType="String"/>
     </entity>
@@ -45,6 +46,6 @@
         <element name="Command" positionX="136.78125" positionY="116.56640625" width="128" height="178"/>
         <element name="Gestures" positionX="72" positionY="153" width="128" height="133"/>
         <element name="UserList" positionX="54" positionY="90" width="128" height="88"/>
-        <element name="Users" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="Users" positionX="-63" positionY="-18" width="128" height="149"/>
     </elements>
 </model>

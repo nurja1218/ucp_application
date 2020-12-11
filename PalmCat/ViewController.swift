@@ -52,6 +52,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     var gamepad:GCMicroGamepad!
     
     var handIndex:Int = 0
+    
+    var nextFlag :Bool = false
     override func awakeFromNib() {
     
         if self.view.layer != nil {
@@ -1445,6 +1447,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         if( title == "c2")
         {
     
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: false)
+
+            }
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
             
         }
@@ -1453,41 +1461,90 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             appDelegate?.controller = self
             handIndex = 1
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
         }
         else if(title == "f2")
         {
             handIndex = 2
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title == "f3")
         {
             handIndex = 3
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title == "f4")
         {
             handIndex = 4
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title == "f5")
         {
             handIndex = 5
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title == "f6")
         {
             handIndex = 6
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title == "f7")
         {
             handIndex = 7
             appDelegate?.handIndex = handIndex
+            
+            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+            if(userId!.count > 0)
+            {
+                CoreDataManager.shared.updateUser(id: userId!, touch: true)
+
+            }
    
         }
         else if(title ==  "m2-app1")
@@ -2230,7 +2287,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
  }
     
-   func  processTouchpanel(touch:Int)
+    func  processTouchpanel(touch:Int, mode:Bool)
     {
         print(touch)
     /*
@@ -2254,15 +2311,28 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
     
     */
-        if(touch > 0)
+    
+   
+    if(touch > 0)
+    {
+        // good
+        if(mode == true)
         {
-            // good
             nextFinger()
+          
         }
         else
         {
-            //bad
-            //id="invalid"
+           // self.Alert(question: "up....", text: "")
+            changeRecocognitionText()
+        }
+    }
+    else
+    {
+        //bad
+        //id="invalid"
+        if(mode == false)
+        {
             let script =
                         "document.getElementById('invalid').click()"
             webView.evaluateJavaScript(script) { (result, error) in
@@ -2270,10 +2340,37 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                               
                           
             }
-            
         }
+        
+   
+        
+    }
+    
+    
 
    }
+    
+    func changeRecocognitionText()
+    {
+       //
+        var script =
+            "var msg = document.getElementsByClassName('div-block-21');" +
+            "msg[0].classList.remove('div-block-21');" +
+           "var html = '<div><b>OK</b> Touch recognition is complete</div>';" +
+            "document.getElementsByClassName('txt-ask-touch')[0].innerHTML = html;" +
+            "var release_txt = document.getElementsByClassName('g-q2');" +
+            "release_txt[0].innerHTML='<b>Please take your finger off.<br></b>'"
+  
+         //
+        
+        webView.evaluateJavaScript(script) { (result, error) in
+                      
+                          
+                      
+        }
+    }
+    
+    
     let appDelegate: AppDelegate? =  NSApp.delegate as! AppDelegate//NSApplication.shared.delegate as! AppDelegate
 
     override func viewDidAppear() {
