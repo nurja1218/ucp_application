@@ -47,7 +47,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
           //  CoreDataManager.shared.updateUser(id: userId!, touch: false)
 
         }
-        
+        let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+       
+        userDefaults!.set(false, forKey: "TOUCH_MODE")
+   
+        userDefaults!.synchronize()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

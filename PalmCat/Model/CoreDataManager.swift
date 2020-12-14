@@ -209,6 +209,8 @@ class CoreDataManager: NSObject {
                               = NSFetchRequest<NSManagedObject>(entityName: "Users")
                       
                   
+            fetchRequest.predicate = NSPredicate(format: "userid == %@", id)
+              
             if let fetchResult = try? context.fetch(fetchRequest)  {
                  
          
@@ -226,13 +228,14 @@ class CoreDataManager: NSObject {
                         if(user.userid == id )
                         {
                             fetchResult[i].setValue(true, forKey: "enable")
-                            fetchResult[i].setValue(false, forKey: "touch")
+                         //   fetchResult[i].setValue(false, forKey: "touch")
+                            //return
                 
                         }
                         else
                         {
                             fetchResult[i].setValue(false, forKey: "enable")
-                            fetchResult[i].setValue(false, forKey: "touch")
+                           // fetchResult[i].setValue(false, forKey: "touch")
                 
                    
                         }
@@ -305,6 +308,53 @@ class CoreDataManager: NSObject {
         
         
     }
+    
+    func save( mode:Bool, onSuccess: @escaping ((Bool) -> Void)) {
+        if let context = context
+        {
+            let fetchRequest: NSFetchRequest<NSManagedObject>
+                                           = NSFetchRequest<NSManagedObject>(entityName: "Dummy")
+                                   
+               
+            //fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+                                  
+            if let fetchResult = try? context.fetch(fetchRequest)  {
+            
+                if(fetchResult.count == 0)
+                {
+                    
+                    let entity: NSEntityDescription
+                        = NSEntityDescription.entity(forEntityName: "Dummy", in: context)!
+                        
+                    let user: Dummy = (NSManagedObject(entity: entity, insertInto: context) as? Dummy)!
+                    
+                   
+                    user.mode = mode
+                    
+                    contextSave { success in
+                        onSuccess(success)
+                        return
+                    }
+                }
+                else
+                {
+                    
+                    
+                    fetchResult[0].setValue(mode, forKey: "mode")
+                  
+                  
+                    contextSave { success in
+                        onSuccess(success)
+                        return
+                    }
+
+                }
+            }
+        }
+        
+        
+    }
+    
     func saveAppList(name:String, type: String, group: String,
                   process: String, etc:String, onSuccess: @escaping ((Bool) -> Void)) {
         if let context = context

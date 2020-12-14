@@ -101,7 +101,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
        
    //     getServerUserList()
    //     getServerAppList()
-          
+     
+   
     }
     
     
@@ -1448,10 +1449,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
     
             let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: false)
-
+            CoreDataManager.shared.save(mode: false) { (success) in
+                
             }
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
             
@@ -1461,24 +1460,27 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             appDelegate?.controller = self
             handIndex = 1
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+          
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
         }
         else if(title == "f2")
         {
             handIndex = 2
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -1486,12 +1488,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             handIndex = 3
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -1499,12 +1502,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             handIndex = 4
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -1512,12 +1516,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             handIndex = 5
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -1525,12 +1530,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             handIndex = 6
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -1538,12 +1544,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         {
             handIndex = 7
             appDelegate?.handIndex = handIndex
-            
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
-            if(userId!.count > 0)
-            {
-                CoreDataManager.shared.updateUser(id: userId!, touch: true)
-
+            let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+           
+            userDefaults!.set(true, forKey: "TOUCH_MODE")
+       
+            userDefaults!.synchronize()
+            CoreDataManager.shared.save(mode: true) { (success) in
+                
             }
    
         }
@@ -2107,6 +2114,16 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         let config = WKWebViewConfiguration()
                   
         
+        let userId = UserDefaults.standard.string(forKey: "USER_ID")
+        CoreDataManager.shared.save(mode: false) { (success) in
+            
+        }
+        
+        let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+       
+        userDefaults!.set(false, forKey: "TOUCH_MODE")
+   
+        userDefaults!.synchronize()
         
         //getApplicationAnchorNode
         let str =  getSelectEventListener()
@@ -2497,6 +2514,18 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     {
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.8", ofType: "html", inDirectory:"www/ucp-v03-f")!)
         webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+        
+        let userId = UserDefaults.standard.string(forKey: "USER_ID")
+        
+        let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+       
+        userDefaults!.set(true, forKey: "TOUCH_MODE")
+   
+        userDefaults!.synchronize()
+        
+        CoreDataManager.shared.save(mode: true) { (success) in
+            
+        }
 
     }
     func setUserIndex()
