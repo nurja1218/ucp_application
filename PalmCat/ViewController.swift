@@ -9,6 +9,8 @@
 import Cocoa
 import WebKit
 import OHMySQL
+import Alamofire
+import SwiftyJSON
 
 import GameController
 
@@ -26,6 +28,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     var timer = Timer()
     
+    var tTimer = Timer()
+    var uTimer = Timer()
+
     var handType:String = ""
     var usageType2:String = ""
     var usageType3:String = ""
@@ -54,6 +59,31 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     var handIndex:Int = 0
     
     var nextFlag :Bool = false
+    
+    
+    var down:Bool = false
+    
+    var downName:String!
+    
+    var version: String? {
+         let dictionary = Bundle.main.infoDictionary
+        let version = dictionary!["CFBundleShortVersionString"] as? String
+             // let build = dictionary["CFBundleVersion"] as? String else {return nil}
+     //   let versionAndBuild: String = "vserion: \(version), build: \(build)"
+        return version
+        
+    }
+
+    var compileDate:Date
+    {
+        let bundleName = Bundle.main.infoDictionary!["CFBundleName"] as? String ?? "Info.plist"
+        if let infoPath = Bundle.main.path(forResource: bundleName, ofType: nil),
+           let infoAttr = try? FileManager.default.attributesOfItem(atPath: infoPath),
+           let infoDate = infoAttr[FileAttributeKey.creationDate] as? Date
+        { return infoDate }
+        return Date()
+    }
+    
     override func awakeFromNib() {
     
         if self.view.layer != nil {
@@ -66,7 +96,160 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
        
     }
-   
+    
+    func documentsDirectoryURL() -> NSURL {
+          let manager = FileManager.default
+          let URLs = manager.urls(for: .documentDirectory, in: .userDomainMask)
+          return URLs[0] as NSURL
+      }
+    func dataFileURL(fileName:String) -> NSURL {
+          
+          let path = String(format: "%@", fileName)
+          let targetPath = documentsDirectoryURL()
+          
+          let manager = FileManager.default
+        
+          
+          if(manager.fileExists(atPath: targetPath.path!))
+          {
+              print("exist")
+          }
+          else
+          {
+              do{
+                  try   manager.createDirectory(at: targetPath as URL, withIntermediateDirectories: false, attributes: nil)
+                  
+              } catch {
+                  print("Error: \(error.localizedDescription)")
+              }
+          }
+          
+          
+          
+          return documentsDirectoryURL().appendingPathComponent(path)! as NSURL
+          
+      }
+    
+    func writeFile(data:Data,downloadsDirectory:URL )
+    {
+        try! data.write(to: downloadsDirectory)
+
+    }
+    
+    func downloadApp(filename:String, url:URL)
+    {
+        let manager = FileManager.default
+               
+        let path = String(format: "%@", filename)
+        let pathUrl = dataFileURL(fileName: filename)
+
+        var downloadsDirectory = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first!
+        downloadsDirectory.appendPathComponent(path)
+        
+        let desktopURL = try! FileManager.default.url(for: .desktopDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        print("desktopURL: " + String(describing: desktopURL))
+        let fileURL = desktopURL.appendingPathComponent(path)
+
+        AF.download(url)
+            .downloadProgress { (progress) in
+                     //  self.progressLabel.text = (String)(progress.fractionCompleted)
+                print(progress)
+            }
+            .responseData { (response) in
+            if(response.error == nil)
+            {
+                let  data = response.value
+                    // let bool = manager.createFile(atPath: downloadsDirectory.path, contents: data, attributes: nil)
+                try! data!.write(to: downloadsDirectory)
+
+                print(data)
+                self.performSegue(withIdentifier: "exec_download", sender: nil)
+                //let data = manager.contents(atPath: pathUrl.path!)
+                             
+         //       let firmeware = DFUFirmware(zipFile:data!)
+              
+            
+           //     self.selectedFirmware = filename
+             //   self.performSegue(withIdentifier: "exec_update", sender: firmeware)
+      
+                
+            }
+        }
+    }
+    
+   func getJson()
+   {
+     //   let url = "https://palmcat.co.kr/sw/palmcat_update.json"
+    let url = "https://palmcat.co.kr/sw/update.json"
+    var down = "http://www.junsoft.org/firmware/palmcat 0.0.1.pkg"
+    down = down.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+    
+    let downUrl = URL(string: down)!
+
+ //  let url = "http://www.junsoft.org/firmware/update.json"
+
+        
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json; charset=utf-8"
+        ]
+
+       
+        AF.request(url, method: .get, parameters: nil,encoding: JSONEncoding.default, headers: headers)
+        
+                   .responseJSON {  [self] response in
+            
+            switch response.result {
+
+            case .success(let value):
+                let json = JSON(value)
+                let items =  json["peroUCP"].dictionaryValue
+                let app = items["macos"]?.dictionaryValue
+                let version0 = app!["version"]?.stringValue
+                let description = app!["description"]?.stringValue
+                let installerDict = app!["installer"]?.dictionaryValue
+                let name = installerDict!["path"]?.stringValue
+       
+                print(version)
+                if(version != version0)
+                {
+                    
+                    let alert = NSAlert()
+                    alert.messageText = ""
+                    alert.informativeText = "There is a new version. Do you want to update?"
+                    alert.addButton(withTitle: "OK")
+                    alert.addButton(withTitle: "Cancel")
+                    alert.alertStyle = NSAlert.Style.warning
+
+                    alert.beginSheetModal(for: self.view.window!, completionHandler: { [self] (modalResponse) -> Void in
+                        if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
+                            
+                     
+                            self.downName = name
+                            self.performSegue(withIdentifier: "exec_download", sender: nil)
+                     
+                         //   self.downloadApp(filename: "palmcat 0.0.1.pkg", url: downUrl)
+                            
+                            
+                         }
+                     })
+                    
+                    
+                }
+                print(app)
+           
+                
+
+            case .failure(let error):
+            
+                print("error : \(error)")
+                //completion(false, JSON())
+                
+                break;
+                
+            }
+        }
+ 
+   }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +281,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
    
         connectDB()
+        
+        getJson()
        
    //     getServerUserList()
    //     getServerAppList()
@@ -632,6 +817,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 let dict:[String:Any] = _dict as! [String:Any]
             
                 let name =  dict["app_Name"] as? String
+                if(name == "MacOS")
+                {
+                    print("macos")
+                }
              
                 let command =  dict["command"] as? String
               
@@ -1356,6 +1545,28 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
          "arrow_element[0].click();" 
         
         getGestureNodeStr(index: 0)
+        
+        let dictionary = Bundle.main.infoDictionary
+       let version0 = dictionary!["CFBundleShortVersionString"] as? String
+
+     //  let ver = self.version
+        print(compileDate)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+
+        let dateString = dateFormatter.string(from: compileDate)
+        
+        
+        var updateStr = "var version_info = document.getElementsByClassName('paragraph-3');" +
+                        "version_info[0].innerHTML = " +
+                        "'Ver " +
+                        String(version0!) +
+                        "<br />Last update " +
+                        String(dateString) +
+                        "<br /><strong>© palmcat corp. All Rights Reserved.</strong><br />'"
+                   
+        
     
         let source =
             jsString0
@@ -1428,10 +1639,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         +   "g16.addEventListener('click', function(){ "
         +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'L16' + 'g15');"
         +   "});"
-        + str + ";"  + mouseover
+        + str + ";"  + mouseover + updateStr
         
      
    
+        
  
         
         webView.evaluateJavaScript(source) { (result, error) in
@@ -1442,9 +1654,40 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         }
     }
     
+    func setAppInfo()
+    {
+        let dictionary = Bundle.main.infoDictionary
+       let version0 = dictionary!["CFBundleShortVersionString"] as? String
+
+     //  let ver = self.version
+        print(compileDate)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+
+        let dateString = dateFormatter.string(from: compileDate)
+
+        var updateStr = "var version_info = document.getElementsByClassName('paragraph-3');" +
+                        "version_info[0].innerHTML = " +
+                        "'Ver " +
+                        String(version0!) +
+                        "<br />Last update " +
+                        String(dateString) +
+                        "<br /><strong>© palmcat corp. All Rights Reserved.</strong><br />'"
+             
+        webView.evaluateJavaScript(updateStr) { (result, error) in
+        
+                //
+          
+            
+        }
+    }
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         //ready to be processed
         let title = webView.title
+        setAppInfo()
+
         if( title == "c2")
         {
     
@@ -1454,6 +1697,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             }
             timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo: nil, repeats: false)
             
+ 
+        
         }
         else if(title == "f1")
         {
@@ -1469,6 +1714,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.save(mode: true) { (success) in
                 
             }
+  
         }
         else if(title == "f2")
         {
@@ -1482,6 +1728,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.save(mode: true) { (success) in
                 
             }
+     
    
         }
         else if(title == "f3")
@@ -1497,6 +1744,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
             }
    
+   
         }
         else if(title == "f4")
         {
@@ -1510,6 +1758,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.save(mode: true) { (success) in
                 
             }
+     
    
         }
         else if(title == "f5")
@@ -1525,6 +1774,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
             }
    
+   
         }
         else if(title == "f6")
         {
@@ -1538,6 +1788,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.save(mode: true) { (success) in
                 
             }
+     
    
         }
         else if(title == "f7")
@@ -1552,6 +1803,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             CoreDataManager.shared.save(mode: true) { (success) in
                 
             }
+    
    
         }
         else if(title ==  "m2-app1")
@@ -2335,13 +2587,31 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         // good
         if(mode == true)
         {
-            nextFinger()
+            if(down == true)
+            {
+               // uTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(timerAction1), userInfo: nil, repeats: true)
+     
+                tTimer.invalidate()
+                tTimer.fire()
+                down = false
           
+            }
+            else
+            {
+                nextFinger()
+      
+            }
+        //    nextFinger()
+      
         }
         else
         {
            // self.Alert(question: "up....", text: "")
-            changeRecocognitionText()
+        //    changeRecocognitionText()
+            down = true
+            
+            tTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction0), userInfo: nil, repeats: false)
+     
         }
     }
     else
@@ -2366,17 +2636,42 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
 
    }
+    @objc func timerAction0(){
+
+        changeRecocognitionText()
+        down = false
+        tTimer.invalidate()
+ 
+        
+    }
+    @objc func timerAction1(){
+
+        if(down == false)
+        {
+            uTimer.invalidate()
+            uTimer.fire()
+            nextFinger()
+        }
     
+    }
     func changeRecocognitionText()
     {
        //
         var script =
+            "var release_txt = document.getElementsByClassName('g-q2');" +
+            "var state_txt = document.getElementsByClassName('txt-ask-touch');" +
+            "function toggle() {" +
+            "    state_txt[0].innerHTML = '<b>Please take your finger off.<br></b>';" +
+            "    state_txt[0].style.color = '#000000';" +
+            "}" +
             "var msg = document.getElementsByClassName('div-block-21');" +
             "msg[0].classList.remove('div-block-21');" +
-           "var html = '<div><b>OK</b> Touch recognition is complete</div>';" +
-            "document.getElementsByClassName('txt-ask-touch')[0].innerHTML = html;" +
-            "var release_txt = document.getElementsByClassName('g-q2');" +
-            "release_txt[0].innerHTML='<b>Please take your finger off.<br></b>'"
+            "release_txt[0].innerHTML = '<div><b>OK</b> Touch recognition is complete</div>';" +
+            "release_txt[0].style.color = '#f88901';" +
+            "state_txt[0].classList.add('blink');" +
+            "    state_txt[0].innerHTML = '<b>Please take your finger off.<br></b>';" +
+            "    state_txt[0].style.color = '#000000';" 
+          
   
          //
         
@@ -2633,6 +2928,20 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
              print("NoScroll")     // Just to see scroll did not occur
        
     }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+ 
+        if segue.identifier == "exec_download"{
+            if let down = segue.destinationController as? Downloader {
+                   
+                down.name = downName
+                     
+            }
+        }
+           
+        
+    }
+    
 }
 
 

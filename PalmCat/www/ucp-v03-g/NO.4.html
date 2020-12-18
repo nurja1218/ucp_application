@@ -24,6 +24,14 @@ body, html {
 </style>
 </head>
 <body class="body">
+    <script type="text/javascript">
+        window.onkeydown = function (event) {
+            if (event.which == 8) {
+                 event.preventDefault();   // turn off browser transition to the previous page
+            };
+
+        };
+    </script>
   <section id="feature-section" class="g-section">
     <div class="g-container w-container">
       <div class="g-div-1">

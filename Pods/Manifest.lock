@@ -6,6 +6,7 @@ PODS:
   - RxBluetoothKit (6.0.0):
     - RxSwift (~> 5.1)
   - RxSwift (5.1.1)
+  - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -13,6 +14,7 @@ DEPENDENCIES:
   - MBPopup
   - OHMySQL
   - RxBluetoothKit
+  - SwiftyJSON
 
 SPEC REPOS:
   trunk:
@@ -21,6 +23,7 @@ SPEC REPOS:
     - OHMySQL
     - RxBluetoothKit
     - RxSwift
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   JSNavigationController:
@@ -38,7 +41,8 @@ SPEC CHECKSUMS:
   OHMySQL: 8bc54d2b8b9e1acfa0e652b18856a9cdbb24c431
   RxBluetoothKit: dad22912b15b74a40df8f60057f218d4e851746d
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 1d93cb0fcd5ecad37986180a657bacf5faf41dce
+PODFILE CHECKSUM: ded7aaef4a56eedb75a2ae9601701a33d3d6efe0
 
 COCOAPODS: 1.9.1

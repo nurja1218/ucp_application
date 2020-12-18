@@ -60,6 +60,14 @@
         </style>
     </head>
     <body class="m1-body">
+        <script type="text/javascript">
+            window.onkeydown = function (event) {
+                if (event.which == 8) {
+                     event.preventDefault();   // turn off browser transition to the previous page
+                };
+
+            };
+        </script>
         <img src="images/doc-logo.png" alt="" class="logo" />
         <div data-hover="1" data-delay="0" class="dropdown-2 w-dropdown">
             <div class="dropdown-toggle w-dropdown-toggle"><img src="images/menu.png" loading="lazy" alt="" class="image-12" /></div>

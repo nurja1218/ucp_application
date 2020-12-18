@@ -24,6 +24,14 @@ body, html {
 </style>
 </head>
 <body class="body">
+    <script type="text/javascript">
+        window.onkeydown = function (event) {
+            if (event.which == 8) {
+                 event.preventDefault();   // turn off browser transition to the previous page
+            };
+
+        };
+        </script>
   <section id="feature-section" class="g-section"><img src="images/pero_logo_n4.png" sizes="200px" srcset="images/pero_logo_n4-p-500.png 500w, images/pero_logo_n4.png 1000w" alt="" class="image-3">
     <div class="g-container w-container">
       <div class="g-div-1">

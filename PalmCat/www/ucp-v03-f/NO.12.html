@@ -21,9 +21,32 @@
 body, html {
   width: 1200px !important;
 }
+  .blink {
+    animation: blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 </style>
 </head>
 <body class="body-2"><img src="images/doc-logo.png" alt="" class="logo">
+    <script type="text/javascript">
+        window.onkeydown = function (event) {
+            if (event.which == 8) {
+                 event.preventDefault();   // turn off browser transition to the previous page
+            };
+
+        };
+    </script>
   <section id="feature-section" class="g-section">
     <div class="f-contain w-container">
       <div class="g-div-1">

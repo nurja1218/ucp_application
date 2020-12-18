@@ -12,5 +12,7 @@ target 'PalmCat' do
   pod "MBPopup"
   pod 'OHMySQL'
  
+  pod 'SwiftyJSON'
+
  
 end

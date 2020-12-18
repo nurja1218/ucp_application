@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
-        <plugIn identifier="com.apple.WebKit2IBPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.WebKit2IBPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -703,6 +703,50 @@
             </objects>
             <point key="canvasLocation" x="179" y="270"/>
         </scene>
+        <!--Update-->
+        <scene sceneID="THh-Zx-9iJ">
+            <objects>
+                <viewController title="Update" id="8Os-xm-ugB" customClass="Downloader" customModule="PalmCat" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="tlk-yE-HVl">
+                        <rect key="frame" x="0.0" y="0.0" width="476" height="207"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Gmj-T6-47j">
+                                <rect key="frame" x="40" y="94" width="346" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="Bqh-PG-CbT"/>
+                                </constraints>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="thU-Xm-II5">
+                                <rect key="frame" x="404" y="96" width="34" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="AQE-PJ-y70"/>
+                                    <constraint firstAttribute="height" constant="16" id="gMu-Iv-Qpu"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="0%" id="wE9-FD-grd">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Gmj-T6-47j" firstAttribute="centerY" secondItem="tlk-yE-HVl" secondAttribute="centerY" id="8ay-P5-lgX"/>
+                            <constraint firstItem="thU-Xm-II5" firstAttribute="centerY" secondItem="tlk-yE-HVl" secondAttribute="centerY" id="CmQ-Vy-q24"/>
+                            <constraint firstItem="thU-Xm-II5" firstAttribute="leading" secondItem="Gmj-T6-47j" secondAttribute="trailing" constant="20" id="Z1G-4v-BeR"/>
+                            <constraint firstAttribute="trailing" secondItem="thU-Xm-II5" secondAttribute="trailing" constant="40" id="v4Z-Ha-9V3"/>
+                            <constraint firstItem="Gmj-T6-47j" firstAttribute="leading" secondItem="tlk-yE-HVl" secondAttribute="leading" constant="40" id="yCX-mF-rR6"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="progessBar" destination="Gmj-T6-47j" id="TzI-IQ-YUG"/>
+                        <outlet property="progessLabel" destination="thU-Xm-II5" id="Oci-C6-T1Z"/>
+                    </connections>
+                </viewController>
+                <customObject id="6o4-Xh-GCQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="678" y="575.5"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="V2y-lO-9OH">
             <objects>
@@ -728,11 +772,12 @@
                     </view>
                     <connections>
                         <outlet property="webView" destination="v49-Z2-kni" id="qpO-cu-1nb"/>
+                        <segue destination="8Os-xm-ugB" kind="modal" identifier="exec_download" id="Hmy-oG-cXc"/>
                     </connections>
                 </viewController>
                 <customObject id="Nan-nP-Wcc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="390.5" y="1827.5"/>
+            <point key="canvasLocation" x="400" y="1907"/>
         </scene>
     </scenes>
 </document>
