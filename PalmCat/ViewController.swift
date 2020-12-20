@@ -1687,7 +1687,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         //ready to be processed
         let title = webView.title
         setAppInfo()
-
+        let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+        userDefaults!.set(false, forKey: "TOUCH_MODE")
+     
+        userDefaults!.set(-1, forKey: "TOUCH_INDEX")
+        userDefaults!.synchronize()
+   
         if( title == "c2")
         {
     
@@ -1709,6 +1714,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
+            userDefaults!.set(1, forKey: "TOUCH_INDEX")
        
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
@@ -1723,7 +1729,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
-       
+            userDefaults!.set(2, forKey: "TOUCH_INDEX")
+      
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -1738,7 +1745,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
-       
+            userDefaults!.set(3, forKey: "TOUCH_INDEX")
+      
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -1753,7 +1761,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
-       
+            userDefaults!.set(-1, forKey: "TOUCH_INDEX")
+      
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -1769,6 +1778,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
        
+            userDefaults!.set(1, forKey: "TOUCH_INDEX")
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -1783,7 +1793,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
-       
+            userDefaults!.set(2, forKey: "TOUCH_INDEX")
+      
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -1798,7 +1809,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
            
             userDefaults!.set(true, forKey: "TOUCH_MODE")
-       
+            userDefaults!.set(3, forKey: "TOUCH_INDEX")
+      
             userDefaults!.synchronize()
             CoreDataManager.shared.save(mode: true) { (success) in
                 
@@ -2559,82 +2571,64 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     func  processTouchpanel(touch:Int, mode:Bool)
     {
         print(touch)
-    /*
-        if(touch <= 4)
-        {
-            // good
-            nextFinger()
-        }
-        else
-        {
-            //bad
-            //id="invalid"
-            let script =
-                        "document.getElementById('invalid').click()"
-            webView.evaluateJavaScript(script) { (result, error) in
-                          
-                              
-                          
-            }
-            
-        }
-    
-    */
-    
+  
    
-    if(touch > 0)
-    {
-        // good
-        if(mode == true)
+  
+        if(touch > 0)
         {
-            if(down == true)
+        // good
+            if(mode == true)
             {
-               // uTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(timerAction1), userInfo: nil, repeats: true)
-     
-                tTimer.invalidate()
-                tTimer.fire()
-                down = false
+                /*
+                if(down == true)
+                {
+         
+                    tTimer.invalidate()
+                    tTimer.fire()
+                    down = false
+              
+                }
+                else
+                {
+                    nextFinger()
+          
+                }
+                */
+                
+                nextFinger()
+
+            //    nextFinger()
           
             }
             else
             {
-                nextFinger()
-      
+                down = true
+               
+                changeRecocognitionText()
+            
+             //   tTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction0), userInfo: nil, repeats: false)
+         
             }
-        //    nextFinger()
-      
         }
         else
         {
-           // self.Alert(question: "up....", text: "")
-        //    changeRecocognitionText()
-            down = true
-            
-            tTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(timerAction0), userInfo: nil, repeats: false)
+            if(mode == false)
+            {
+                let script =
+                            "document.getElementById('invalid').click()"
+                webView.evaluateJavaScript(script) { [self] (result, error) in
+                      
+                    
+                    tTimer.invalidate()
+                    tTimer.fire()
      
-        }
-    }
-    else
-    {
-        //bad
-        //id="invalid"
-        if(mode == false)
-        {
-            let script =
-                        "document.getElementById('invalid').click()"
-            webView.evaluateJavaScript(script) { (result, error) in
-                          
-                              
-                          
+                    down = true
+            
+                }
             }
+        
         }
-        
-   
-        
-    }
     
-    
-
    }
     @objc func timerAction0(){
 
