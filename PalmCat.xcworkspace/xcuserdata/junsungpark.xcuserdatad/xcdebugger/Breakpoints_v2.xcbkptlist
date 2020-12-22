@@ -16,16 +16,16 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "713"
             endingLineNumber = "713"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "getServerAppList()"
+            landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "200A7974-0995-442C-9C28-F9317E288946 - 7ade1b11096b372b"
+                  uuid = "200A7974-0995-442C-9C28-F9317E288946 - 56176ff9da2e8060"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "PalmCat.ViewController.getServerAppList() -&gt; ()"
-                  moduleName = "PalmCat"
+                  symbolName = "pero_UCP.ViewController.getServerAppList() -&gt; ()"
+                  moduleName = "pero UCP"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/junsungpark/Downloads/PalmCat/PalmCat/PalmCat/ViewController.swift"
                   startingColumnNumber = "9223372036854775807"
@@ -35,12 +35,12 @@
                   offsetFromSymbolStart = "3208">
                </Location>
                <Location
-                  uuid = "200A7974-0995-442C-9C28-F9317E288946 - d4e88b91aa023e52"
+                  uuid = "200A7974-0995-442C-9C28-F9317E288946 - a06fdfa55dcc0cd1"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in PalmCat.ViewController.getServerAppList() -&gt; ()"
-                  moduleName = "PalmCat"
+                  symbolName = "closure #1 (Swift.Bool) -&gt; () in pero_UCP.ViewController.getServerAppList() -&gt; ()"
+                  moduleName = "pero UCP"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/junsungpark/Downloads/PalmCat/PalmCat/PalmCat/ViewController.swift"
                   startingColumnNumber = "9223372036854775807"
@@ -64,8 +64,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "244"
             endingLineNumber = "244"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "getJson()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

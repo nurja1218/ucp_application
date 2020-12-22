@@ -1272,7 +1272,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                   
                 processLogin()
-               // NSWorkspace.shared.launchApplication("Pero")
+               // NSWorkspace.shared.launchApplication("pero core")
                 let mainAppIdentifier = "com.junsoft.Pero"
             
                 let runningApps = NSWorkspace.shared.runningApplications
@@ -1280,7 +1280,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
                 if(!isRunning)
                 {
-                    NSWorkspace.shared.launchApplication("/Applications/Pero")
+                    NSWorkspace.shared.launchApplication("pero core")
 
                 }
                 
@@ -1315,7 +1315,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
                 if(!isRunning)
                 {
-                    NSWorkspace.shared.launchApplication("Pero")
+                    NSWorkspace.shared.launchApplication("pero core")
 
                 }
                 
@@ -2499,7 +2499,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
         }
         */
-        NSWorkspace.shared.launchApplication("Pero")
+        NSWorkspace.shared.launchApplication("pero core")
 
  
         let userId = UserDefaults.standard.string(forKey: "USER_ID")
@@ -2813,6 +2813,8 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
         let userID = UserDefaults.standard.string(forKey: "USER_ID")
         
+        NSWorkspace.shared.launchApplication("pero core")
+
        
         let init0 =   UserDefaults.standard.bool(forKey: "PALMCAT_INIT")
         if(init0 == false)
@@ -2842,11 +2844,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
             if(!isRunning)
             {
-                NSWorkspace.shared.launchApplication("Pero")
+                NSWorkspace.shared.launchApplication("pero core")
 
             }
  */
-            NSWorkspace.shared.launchApplication("Pero")
+          //  NSWorkspace.shared.launchApplication("pero core")
 
          
             (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: userID as! String)
