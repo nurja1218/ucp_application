@@ -802,6 +802,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
       //  if(userID != (self.user.userid ))
         if(bInit == false)
         {
+            getServerUserList()
             let query = OHMySQLQueryRequestFactory.select(self.user.type!, condition: nil )
             
             let response = try? OHMySQLContainer.shared.mainQueryContext?.executeQueryRequestAndFetchResult(query)
@@ -1279,7 +1280,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
 
                 if(!isRunning)
                 {
-                    NSWorkspace.shared.launchApplication("Pero")
+                    NSWorkspace.shared.launchApplication("/Applications/Pero")
 
                 }
                 
@@ -2484,8 +2485,23 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         
         
         let config = WKWebViewConfiguration()
-                  
-        
+               
+        let mainAppIdentifier = "com.junsoft.Pero"
+    
+        /*
+        let runningApps = NSWorkspace.shared.runningApplications
+      //  print(runningApps.bundleIdentifier)
+        let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
+
+        if(!isRunning)
+        {
+            NSWorkspace.shared.launchApplication("/Applications/Pero")
+
+        }
+        */
+        NSWorkspace.shared.launchApplication("Pero")
+
+ 
         let userId = UserDefaults.standard.string(forKey: "USER_ID")
         CoreDataManager.shared.save(mode: false) { (success) in
             
@@ -2820,6 +2836,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
             let mainAppIdentifier = "com.junsoft.Pero"
             
+            /*
             let runningApps = NSWorkspace.shared.runningApplications
             let isRunning = !runningApps.filter { $0.bundleIdentifier == mainAppIdentifier }.isEmpty
 
@@ -2828,6 +2845,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 NSWorkspace.shared.launchApplication("Pero")
 
             }
+ */
+            NSWorkspace.shared.launchApplication("Pero")
+
          
             (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: userID as! String)
      
