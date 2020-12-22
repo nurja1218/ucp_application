@@ -248,6 +248,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
             }
         }
+    
  
    }
     
@@ -286,7 +287,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
        
    //     getServerUserList()
    //     getServerAppList()
-     
+       
    
     }
     
@@ -900,6 +901,10 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                 
        
           //
+                let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+                userDefaults!.set("", forKey: "USER_ID")
+                userDefaults?.synchronize()
+                
                 
                 UserDefaults.standard.set("",forKey: "USER_ID")
                 UserDefaults.standard.synchronize()
@@ -1002,11 +1007,19 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                                                         var success:Bool = false
                                                                         (self.user, sucess:success ) = CoreDataManager.shared.getUser(query: email as! String)
                                                                     
+                                                                        UserDefaults.standard.set(email,forKey: "USER_ID")
+                                                                        UserDefaults.standard.setValue(false, forKey: "INIT_DB")
+                                                                        UserDefaults.standard.synchronize()
+                                                                
+                                                                        UserDefaults.standard.synchronize()
+                                                               
                                                                         CoreDataManager.shared.updateUser(id: email as! String)
-                                                                        
+                                                                        /*
                                                                         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                                                         
                                                                         self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+ */
+                                                                        self.loadInitialize()
                                                                         
                                                                                                                   
                                                                     })
@@ -1115,10 +1128,13 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
                                 UserDefaults.standard.synchronize()
                              
                                 CoreDataManager.shared.updateUser(id:self.user.userid!)
-                                
+                                /*
                                 let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                                 
                                 self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+ */
+                                self.loadInitialize()
+                       
                                 
                             }
                             
@@ -1450,13 +1466,19 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             {
                    
                
+                UserDefaults.standard.setValue(true, forKey: "INIT_INITIAL")
+                UserDefaults.standard.synchronize()
+       
                 initLocalCommandDB()
                 decisionHandler(.allow)
 
-                
+                /*
                 let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
                 
                 self.webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+ */
+                loadInitialize()
+       
                 
                        
             }
@@ -1497,6 +1519,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     
     func initApplication()
     {
+        UserDefaults.standard.setValue(false, forKey: "INIT_INITIAL")
+        UserDefaults.standard.synchronize()
+
         selectedGestureIndex = 0
         selectedGestureOldIndex = 0
         
@@ -1686,9 +1711,12 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         //ready to be processed
         let title = webView.title
+        let userId = UserDefaults.standard.string(forKey: "USER_ID")
+      
         setAppInfo()
         let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
         userDefaults!.set(false, forKey: "TOUCH_MODE")
+        userDefaults!.set(userId, forKey: "USER_ID")
      
         userDefaults!.set(-1, forKey: "TOUCH_INDEX")
         userDefaults!.synchronize()
@@ -1696,7 +1724,7 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
         if( title == "c2")
         {
     
-            let userId = UserDefaults.standard.string(forKey: "USER_ID")
+        //    let userId = UserDefaults.standard.string(forKey: "USER_ID")
             CoreDataManager.shared.save(mode: false) { (success) in
                 
             }
@@ -1704,6 +1732,11 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
             
  
         
+        }
+        else if(title == "g1")
+        {
+            //image-3
+            print("g1")
         }
         else if(title == "f1")
         {
@@ -2025,6 +2058,17 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
        
         let content = message.body as! String
         var msg = String()
+        if(content.contains("logo") == true)
+        {
+            let ret =  UserDefaults.standard.bool(forKey:  "INIT_INITIAL")
+          
+            if(ret == true )
+            {
+                loadSettings()
+          
+            }
+             return
+        }
         for i in 0..<content.characters.count - 3{
            
             let index = content.index(content.startIndex, offsetBy:i)
@@ -2370,6 +2414,70 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
              
       */
   
+    
+    func loadInitialize()
+    {
+        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+        
+        
+        let config = WKWebViewConfiguration()
+                  
+        
+        let userId = UserDefaults.standard.string(forKey: "USER_ID")
+        CoreDataManager.shared.save(mode: false) { (success) in
+            
+        }
+        
+        let userDefaults = UserDefaults(suiteName: "group.junsoft.data")
+       
+        userDefaults!.set(false, forKey: "TOUCH_MODE")
+   
+        userDefaults!.synchronize()
+        
+        //getApplicationAnchorNode
+        let str =  getSelectEventListener()
+    
+        let source =
+            "var logo = document.getElementsByClassName('image-3');"
+        +   "logo[0].addEventListener('click', function(){ "
+        +   "       window.webkit.messageHandlers.iosListener0.postMessage( 'logo');"
+        +   "});"
+     
+     
+        
+        
+        let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
+        
+        config.userContentController.addUserScript(script)
+        
+        config.userContentController.add(self, name: "iosListener0")
+               
+     //   config.userContentController.add(self, name: "iosListener1")
+                      
+        
+        webView = MyWKWebView(frame: CGRect(x: 0, y: 0, width: 1200, height: 700), configuration: config)
+             
+        
+        let color : CGColor = CGColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+       
+        webView.wantsLayer = true
+        
+        
+      //  webView.scrollView.isScrollEnabled = false
+        
+      //  webView.isOpaque = false
+        webView.setValue(false, forKey: "drawsBackground")
+        webView.layer?.backgroundColor = NSColor.clear.cgColor;
+        
+        
+        webView.navigationDelegate = self
+        
+                   
+        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+       
+       self.view.addSubview(webView)
+    }
+    
     func loadSettings()
     {
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.16_default", ofType: "html", inDirectory:"www/cup-v03-m")!)
@@ -2784,8 +2892,9 @@ class ViewController: NSViewController , WKUIDelegate,WKNavigationDelegate, WKSc
     func backIntro()
     {
        
-        let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
-        webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+      //  let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "NO.3", ofType: "html", inDirectory:"www/ucp-v03-g")!)
+      //  webView.loadFileURL(fileURL, allowingReadAccessTo: fileURL)
+        loadInitialize()
     }
     func setHandTypeL()
     {
